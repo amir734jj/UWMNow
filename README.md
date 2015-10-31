@@ -9,5 +9,5 @@ To run the system, make sure you installed [nodejs](https://nodejs.org/) and [SQ
 And then follow these commands in terminal:
 
     npm install
-    npm server.js
+    node server.js
 
