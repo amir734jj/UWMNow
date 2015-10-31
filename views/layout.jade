@@ -1,0 +1,60 @@
+doctype html
+html(lang="en")
+	head
+		title= "UWM Now!"
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		link(rel="stylesheet", href="/css/bootstrap.min.css")
+		link(rel="stylesheet", href="/css/font-awesome.css")
+		link(rel="stylesheet", href="/css/layout.css")
+		script(src="/js/jquery.min.js")
+		script(src="/js/bootstrap.min.js")
+		script(src="/js/skycons.js")
+		script(src="/js/action.js")
+		block head
+	body
+		nav.navbar.navbar-inverse
+			.container-fluid
+				.navbar-header
+					button.navbar-toggle(type="button", data-toggle="collapse", data-target="#navigationbar")
+						span.icon-bar
+						span.icon-bar
+						span.icon-bar
+					a.navbar-brand(href="/")
+						span.fa.fa-cubes
+						| &nbsp UWM Now!
+				.collapse.navbar-collapse(id="navigationbar")
+					ul.nav.navbar-nav.navbar-right
+						- if (user && user.admin)
+							li
+								a(href="/administrative")
+									i(class="fa fa-sign-out")
+									| &nbsp Administrative
+						- if (user)
+							// li
+							//	a(href="/schedule")
+							//		i(class="fa fa-cog")
+							//		| &nbsp Weekly schedule
+							li
+								a(href="/postnews")
+									i(class="fa fa-newspaper-o")
+									| &nbsp Post / Review News
+							li
+								a(href="/account")
+									i(class="fa fa-cog")
+									| &nbsp My account
+							li
+								a(href="/logout")
+									i(class="fa fa-sign-out")
+									| &nbsp Logout
+						- else
+							li
+								a(href="/register")
+									i(class="fa fa-pencil-square")
+									| &nbsp Sign Up
+							li
+								a(href="/login")
+									i(class="fa fa-sign-in")
+									| &nbsp Login
+		.container
+			.jumbotron
+				block content

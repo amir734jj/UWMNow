@@ -1,0 +1,58 @@
+extends ./layout.jade
+
+
+block content
+	.container
+		- if(user)
+			h2 Welcome #{user.firstName} to UWM Now!
+
+			.col-md-4
+				h3 Campus Weather now:
+					img(src="svg/weather/#{weather.currently.icon}.svg", class="weather-icon")
+
+				ul.list-group
+					li.list-group-item Forecast will be #{weather.daily.summary}
+					li.list-group-item Current temperature is #{weather.currently.temperature}
+						sup  F
+						|  and it will #{weather.hourly.summary}
+
+			.col-md-8
+				h3(style="color: green;") List of news posted by students (in chronological order):
+
+				- each item in news
+					div(class="panel panel-default")
+						div(class="panel-panel")
+							h5
+								- if (item.newsApprove)
+									span(class="label label-success") Approved
+								- else
+									span(class="label label-danger") Unapproved
+								|  posted on #{moment(new Date(item.newsDate)).format('MM/DD/YYYY - hh:mm')} by #{item.initial}
+							p
+								| #{item.newsText}
+
+
+		- else
+			.page-header
+				h2 Welcome to UWM Now!
+				h3
+					| This is portal for UWM students to:
+				ul
+					li communicate with their fellow students
+					li have a class discussion
+					li be a successful in their studies. Work Smart, Not Hard
+				h4
+					| If you are a UWM student, Please register.
+			div
+				.col-md-4.figureGeneral
+					img(src="svg/figures/classroom.svg", class="figure")
+					.caption
+						| Due to the time constraints, almost in all of the classes there is not time for constructive discussion or maybe students are afraid of asking questions. In addition, discussions on D2L are generally not being used as students are afraid of being judged.
+				.col-md-4.figureGeneral
+					img(src="svg/figures/discussion.svg",class="figure")
+					.caption
+						| Having a true discussion with your fellow classmates without being afraid of being judge can result in more learning and more engagement with studies.
+				.col-md-4.figureGeneral
+					img(src="svg/figures/success.svg", class="figure")
+					.caption
+						| Being more engaged with class, means more likelihood of more study time and being aware of the situation. These can result in higher grade and success.

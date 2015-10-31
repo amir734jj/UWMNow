@@ -1,0 +1,14 @@
+extends ./layout.jade
+
+
+block content
+	.container
+		.page-header
+			- if (activated)
+				h2 Your account successfully activated!
+				h3
+					| You successfully activated your account (#{email}), please login to your account.
+			- else
+				h2 Please active your account!
+				h3
+					| We just sent the activation link to #{email}, please use the link to activate your account.

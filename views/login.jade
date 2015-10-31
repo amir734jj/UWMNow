@@ -1,0 +1,21 @@
+extends ./layout.jade
+
+block content
+	.container
+		h3 Please Login
+		if(unauthorized)
+			div.alert.alert-danger #{message}
+		form(role="form", action="/login", method="post", required)
+			div.form-group
+				label Email:
+				input.form-control(type="email", placeholder="Enter Email", name="email", required, pattern="[A-Za-z0-9]*\@uwm.edu", title="@UWM.edu emails only")
+			div.form-group
+				label Password:
+				input.form-control(type="password", placeholder="Enter Password", name="password", required)
+			div.form-group
+				div.checkbox
+					label
+						input(type="checkbox", name="remember")
+						| Remember me
+			div.btn-group
+				button.btn.btn-primary(type="submit", autofocus) Login
