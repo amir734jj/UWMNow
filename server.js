@@ -20,15 +20,19 @@ var database = require("./modules/database.js");
 var utility = require("./modules/utility.js");
 var news = require("./modules/news.js");
 var email = require("./modules/email.js");
+var discussion = require("./modules/discussion.js");
 
 // initialize rootURL
-var rootURL = "http://localhost"
+var rootURL = "http://localhost";
+
+// initialize port number
+var portNumber = 80;
 
 // initialize weather API
 var forecast = new Forecast({
 	service: "forecast.io",
 	key: "55feee02585767fbba96817420ff5cd2",
-	units: "celsius",
+	units: "fahrenheit",
 	cache: true,
 	ttl: {
 		minutes: 27,
@@ -107,6 +111,7 @@ app.use(session({
  *		postnews/:uid/deletenews
  *		administrative/postnews/:uid/:command
  *		activate/:hashcode
+ *		discussion
  */
 
 // if user is logged-in, then render filled main, otherwise empty main
@@ -115,12 +120,15 @@ app.get("/", function(req, res) {
 		news.listApprovedNews(req, sequelize, databaseModels.newsModel,
 			databaseModels.userModel,
 			function(news) {
-				weather.getData(forecast, function(weather) {
-					res.render("main", {
-						"loggedIn": true,
-						"user": req.session.user,
-						"news": news,
-						"weather": weather
+				discussion.getAllApprovedDiscussion(req, sequelize, databaseModels, function(discussions) {
+					weather.getData(forecast, function(weather) {
+						res.render("main", {
+							"loggedIn": true,
+							"user": req.session.user,
+							"news": news,
+							"weather": weather,
+							"discussions": discussions
+						});
 					});
 				});
 			});
@@ -177,14 +185,16 @@ app.get("/administrative", function(req, res) {
 				news.listUnapprovedNews(req, sequelize, databaseModels.newsModel,
 					databaseModels.userModel,
 					function(news) {
-						res.render("administrative", {
-							"users": users,
-							"user": req.session.user,
-							"news": news
+						discussion.getAllDiscussion(req, sequelize, databaseModels, function(discussions) {
+							res.render("administrative", {
+								"users": users,
+								"user": req.session.user,
+								"news": news,
+								"discussions": discussions
+							});
 						});
 					});
 			});
-
 	} else {
 		res.redirect("/login");
 	}
@@ -257,6 +267,69 @@ app.get("/activate/:hashcode", function(req, res) {
 					res.redirect("/");
 				}
 			});
+	}
+});
+
+app.get("/discussion", function(req, res) {
+	if (req.session.user) {
+		discussion.getDiscussionByUser(req, sequelize, databaseModels, function(discussionsByYou) {
+			res.render("discussion", {
+				"listOfDepartment": discussion.getListOfDepartment(),
+				"user": req.session.user,
+				"discussionsByYou": discussionsByYou
+			});
+		});
+	} else {
+		res.redirect("/login");
+	}
+});
+
+app.get("/discussion/deletediscussion/:discussionUID", function(req, res) {
+	if (req.session.user) {
+		discussion.deleteDiscussionByUser(req, sequelize, databaseModels, function(discussionsByYou) {
+			res.redirect("/discussion");
+		});
+	} else {
+		res.redirect("/login");
+	}
+});
+
+
+
+app.get("/discussion/:departmentCode/:classNumber", function(req, res) {
+	if (req.session.user) {
+		discussion.getDiscussionByClass(req, sequelize, databaseModels, function(discussionsByClass) {
+			res.render("participate", {
+				"user": req.session.user,
+				"discussionsByClass": discussionsByClass,
+				"className": req.params.departmentCode + "-" + req.params.classNumber,
+				"departmentCode": req.params.departmentCode,
+				"classNumber": req.params.classNumber
+			});
+		});
+	} else {
+		res.redirect("/login");
+	}
+});
+
+app.get("/discussion/:departmentCode/:classNumber/deletediscussion/:discussionUID/", function(req, res) {
+	if (req.session.user) {
+		discussion.deleteDiscussionByUser(req, sequelize, databaseModels, function(discussionsByYou) {
+			res.redirect("/discussion/" + req.params.departmentCode + "/" + req.params.classNumber);
+		});
+	} else {
+		res.redirect("/login");
+	}
+});
+
+app.get("/administrative/discussion/:discussionUID/:command", function(req, res) {
+	if (req.session.user && req.session.user.admin) {
+		discussion.updateDiscussionByAdmin(req, sequelize, databaseModels,
+			function(news) {
+				res.redirect("/administrative");
+			});
+	} else {
+		res.redirect("/login");
 	}
 });
 
@@ -351,4 +424,46 @@ app.post("/submitnews", function(req, res) {
 	}
 });
 
-app.listen(80);
+
+app.post("/discussion", function(req, res) {
+	if (req.session.user) {
+		res.redirect("/discussion/" + req.body.departmentCode + "/" + req.body.classNumber);
+	} else {
+		res.redirect("/login");
+	}
+});
+
+app.post("/postdiscussion/:departmentCode/:classNumber", function(req, res) {
+	if (req.session.user) {
+		text = req.body.discussionText;
+		var regex = /(<([^>]+)>)/ig;
+		text = text.replace(regex, "");
+
+		if (text.length >= 1000) {
+			discussion.getDiscussionByClass(req, sequelize, databaseModels, function(discussionsByClass) {
+				res.render("participate", {
+					"user": req.session.user,
+					"discussionsByClass": discussionsByClass,
+					"className": req.params.departmentCode + "-" + req.params.classNumber,
+					"departmentCode": req.params.departmentCode,
+					"classNumber": req.params.classNumber,
+					"countError": true,
+					"defaultText": req.body.discussionText
+				});
+			});
+		} else {
+			discussion.addDiscussion(req, sequelize, databaseModels, function(discussionsByClass) {
+				res.redirect("/discussion/" + req.params.departmentCode + "/" + req.params.classNumber);
+			});
+		}
+	} else {
+		res.redirect("/login");
+	}
+});
+
+
+console.log("UWMNow! started and it can be accessed at port :80");
+console.log("Address: " + rootURL + ":80");
+
+// port address
+app.listen(portNumber);

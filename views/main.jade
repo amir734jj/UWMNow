@@ -16,22 +16,24 @@ block content
 						sup  F
 						|  and it will #{weather.hourly.summary}
 
-			.col-md-8
+			.col-md-4
 				h3(style="color: green;") List of news posted by students (in chronological order):
-
+				
 				- each item in news
 					div(class="panel panel-default")
 						div(class="panel-panel")
 							h5
-								- if (item.newsApprove)
-									span(class="label label-success") Approved
-								- else
-									span(class="label label-danger") Unapproved
-								|  posted on #{moment(new Date(item.newsDate)).format('MM/DD/YYYY - hh:mm')} by #{item.initial}
-							p
+								|  Posted on #{moment(new Date(item.newsDate)).format('MM/DD/YYYY - hh:mm')} by #{item.initial}
+							
+							p 
 								| #{item.newsText}
-
-
+			.col-md-4
+				h3(style="color: green;") List of discussion posts by students (in chronological order):
+				- each discussionItem in discussions
+					ul.list-group
+						a(href="/discussion/#{discussionItem.departmentCode}/#{discussionItem.classNumber}")
+							li.list-group-item Discussion post on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by #{discussionItem.initial} for #{discussionItem.className}
+								
 		- else
 			.page-header
 				h2 Welcome to UWM Now!

@@ -1,0 +1,46 @@
+extends ./layout.jade
+
+block content
+	.container
+		h2 Classs Discussions for #{className}:
+
+		- if (countError)
+			.alert.alert-danger(role='alert')
+				a.alert-link(href='#') You have over 1000 characters in your discussion post
+
+
+		h3(style="color: green;") Post a discussion:
+
+		form(role="form", action="/postdiscussion/#{departmentCode}/#{classNumber}", method="post", novalidate)
+			div.form-group
+				label Discussion Text (1000 characters, maximum):
+				textarea(name="discussionText", required, id="discussionText")
+					- if(!defaultText)
+						| Enter a discussion item (1000 characters, maximum)
+					- else
+						| !{defaultText}
+			div.btn-group
+				button.btn.btn-primary(type="submit") Post Discussion
+					span#discussionTextCharacterCount
+
+		- if (discussionsByClass) 
+			hr
+			- if (discussionsByClass.length > 0)
+				h3(style="color: green;") List of discussions posts by class:
+
+				- each discussionItem in discussionsByClass
+					div(class="panel panel-default")
+						div(class="panel-panel")
+							h5
+								- if (discussionItem.discussionApprove)
+									span(class="label label-success") Approved
+								- else
+									span(class="label label-danger") Unapproved
+								|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by #{discussionItem.initial} for #{discussionItem.className}
+								- if (discussionItem.userSelf)
+									a(class="btn btn-default pull-right", href="/discussion/#{departmentCode}/#{classNumber}/deletediscussion/#{discussionItem.discussionUID}")
+										| delete
+
+							| !{discussionItem.discussionText}
+			- else
+				h3(style="color: red;") There is no discussion post for #{className}

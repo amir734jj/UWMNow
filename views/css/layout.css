@@ -30,3 +30,31 @@ textarea {
 .weather-icon {
     max-width: 2.2em;
 }
+select {
+    width: auto !important;
+    max-width: 100%;
+}
+#classNumber {
+    max-width: 18em;
+}
+.note-editor {
+    margin: 1em !important;
+}
+.note-dialog .modal-dialog {
+    z-index: 1050;
+}
+.label {
+    padding: 0.5em !important;
+    margin: 0.5em !important;
+}
+a {
+    font-size: 105%;
+    font-weight: bold;
+    color: firebrick;
+    text-decoration: none;
+}
+a:hover, a:active {
+    text-decoration: none;
+    color: darkyellow;
+    background-color: darkgreen;
+}

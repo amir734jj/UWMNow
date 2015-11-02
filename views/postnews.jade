@@ -6,8 +6,8 @@ block content
 
 		form(role="form", action="/submitnews", method="post", required)
 			div.form-group
-				label News Text (140 character, Twitter style):
-				textarea.form-control(type="text", placeholder="Enter a news item (140 character)", name="newsText", autofocus="", required, maxlength="140")
+				label News Text (140 characters, Twitter style):
+				textarea.form-control(type="text", placeholder="Enter a news item (140 characters)", name="newsText", autofocus="", required, maxlength="140")
 			div.btn-group
 				button.btn.btn-primary(type="submit") Post News
 		
@@ -19,9 +19,9 @@ block content
 				div(class="panel-panel")
 					h5
 						- if (item.newsApprove)
-							span(class="label label-success") Approved
+							span(class="label label-success approve") Approved
 						- else
-							span(class="label label-danger") Unapproved
+							span(class="label label-danger approve") Unapproved
 						|  posted on #{moment(new Date(item.newsDate)).format('MM/DD/YYYY - hh:mm')} by #{item.initial}
 						a(class="btn btn-default pull-right", href="postnews/#{item.newsUID}/deletenews")
 							| delete

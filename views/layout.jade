@@ -3,13 +3,22 @@ html(lang="en")
 	head
 		title= "UWM Now!"
 		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
 		link(rel="stylesheet", href="/css/bootstrap.min.css")
 		link(rel="stylesheet", href="/css/font-awesome.css")
 		link(rel="stylesheet", href="/css/layout.css")
+		link(rel="stylesheet", href="/css/select2.min.css")
+		link(rel="stylesheet", href="/css/bootstrap-wysihtml5.css")
+		link(rel="stylesheet", href="/css/summernote.css")
+		link(rel="stylesheet", href="/css/summernote-bs3.css")
+
+
 		script(src="/js/jquery.min.js")
 		script(src="/js/bootstrap.min.js")
-		script(src="/js/skycons.js")
+		script(src="/js/select2.min.js")
+		script(src="/js/summernote.js")
 		script(src="/js/action.js")
+
 		block head
 	body
 		nav.navbar.navbar-inverse
@@ -30,10 +39,14 @@ html(lang="en")
 									i(class="fa fa-sign-out")
 									| &nbsp Administrative
 						- if (user)
-							// li
-							//	a(href="/schedule")
-							//		i(class="fa fa-cog")
-							//		| &nbsp Weekly schedule
+							li
+								a(href="/schedule")
+									i(class="fa fa-cog")
+									| &nbsp Weekly schedule
+							li
+								a(href="/discussion")
+									i(class="fa fa-comments")
+									| &nbsp Class Discussion
 							li
 								a(href="/postnews")
 									i(class="fa fa-newspaper-o")
@@ -41,7 +54,7 @@ html(lang="en")
 							li
 								a(href="/account")
 									i(class="fa fa-cog")
-									| &nbsp My account
+									| &nbsp My Account
 							li
 								a(href="/logout")
 									i(class="fa fa-sign-out")

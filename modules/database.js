@@ -24,30 +24,28 @@ exports.initialize = function(db, Sequelize) {
 		admin: {
 			type: Sequelize.BOOLEAN,
 			defaultValue: false
+		},
+		listOfSubscribedClasses: {
+			type: Sequelize.BLOB
 		}
 	}, {
 		freezeTableName: true
 	});
 
-	// var Class = db.define("class", {
-	// 	className: {
-	// 		type: Sequelize.STRING
-	// 	},
-	// 	classDate: {
-	// 		type: Sequelize.DATE
-	// 	},
-	// 	classStartTime: {
-	// 		type: Sequelize.STRING
-	// 	},
-	// 	classEndTime: {
-	// 		type: Sequelize.STRING
-	// 	},
-	// 	hashcode: {
-	// 		type: Sequelize.STRING
-	// 	}
-	// }, {
-	// 	freezeTableName: true
-	// });
+	var Class = db.define("class", {
+		classDepartment: {
+			type: Sequelize.STRING
+		},
+		classNumber: {
+			type: Sequelize.INTEGER
+		},
+		classUID: {
+			type: Sequelize.STRING,
+			unique: true
+		}
+	}, {
+		freezeTableName: true
+	});
 
 
 	var News = db.define("news", {
@@ -72,12 +70,40 @@ exports.initialize = function(db, Sequelize) {
 		freezeTableName: true
 	});
 
+
+	var Discussion = db.define("discussion", {
+		discussionText: {
+			type: Sequelize.BLOB
+		},
+		discussionDate: {
+			type: Sequelize.DATE
+		},
+		discussionApprove: {
+			type: Sequelize.BOOLEAN,
+			defaultValue: true
+		},
+		hashcode: {
+			type: Sequelize.STRING
+		},
+		discussionUID: {
+			type: Sequelize.STRING,
+			unique: true
+		},
+		classUID: {
+			type: Sequelize.STRING
+		}
+	}, {
+		freezeTableName: true
+	});
+
 	db.sync({
 		force: false
 	});
 
 	return {
 		"userModel": User,
-		"newsModel": News
+		"newsModel": News,
+		"classModel": Class,
+		"discussionModel": Discussion
 	};
 };
