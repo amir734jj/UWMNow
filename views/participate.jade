@@ -38,8 +38,8 @@ block content
 									span(class="label label-danger") Unapproved
 								|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by #{discussionItem.initial} for #{discussionItem.className}
 								- if (discussionItem.userSelf)
-									a(class="btn btn-default pull-right", href="/discussion/#{departmentCode}/#{classNumber}/deletediscussion/#{discussionItem.discussionUID}")
-										| delete
+									a(class="btn btn-danger pull-right", href="/discussion/#{departmentCode}/#{classNumber}/deletediscussion/#{discussionItem.discussionUID}")
+										| Delete
 
 							| !{discussionItem.discussionText}
 			- else

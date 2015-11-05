@@ -140,7 +140,7 @@ app.get("/", function(req, res) {
 	}
 });
 
-
+// render about page
 app.get("/about", function(req, res) {
 	if (req.session.user) {
 		res.render("about", {
@@ -285,6 +285,7 @@ app.get("/activate/:hashcode", function(req, res) {
 	}
 });
 
+// if user is logged-in, then discussions by user, otherwise active account
 app.get("/discussion", function(req, res) {
 	if (req.session.user) {
 		discussion.getDiscussionByUser(req, sequelize, databaseModels, function(discussionsByYou) {
@@ -299,6 +300,7 @@ app.get("/discussion", function(req, res) {
 	}
 });
 
+// if user is logged-in, the handle delete discussion, otherwise active account
 app.get("/discussion/deletediscussion/:discussionUID", function(req, res) {
 	if (req.session.user) {
 		discussion.deleteDiscussionByUser(req, sequelize, databaseModels, function(discussionsByYou) {
@@ -310,7 +312,7 @@ app.get("/discussion/deletediscussion/:discussionUID", function(req, res) {
 });
 
 
-
+// if user is logged-in, then get discussions by class, otherwise active account
 app.get("/discussion/:departmentCode/:classNumber", function(req, res) {
 	if (req.session.user) {
 		discussion.getDiscussionByClass(req, sequelize, databaseModels, function(discussionsByClass) {
@@ -327,6 +329,7 @@ app.get("/discussion/:departmentCode/:classNumber", function(req, res) {
 	}
 });
 
+// if user is logged-in, handle delete discussion, otherwise active account
 app.get("/discussion/:departmentCode/:classNumber/deletediscussion/:discussionUID/", function(req, res) {
 	if (req.session.user) {
 		discussion.deleteDiscussionByUser(req, sequelize, databaseModels, function(discussionsByYou) {
@@ -337,6 +340,7 @@ app.get("/discussion/:departmentCode/:classNumber/deletediscussion/:discussionUI
 	}
 });
 
+// if user is loggedIn and is administrator, then handle administrative command
 app.get("/administrative/discussion/:discussionUID/:command", function(req, res) {
 	if (req.session.user && req.session.user.admin) {
 		discussion.updateDiscussionByAdmin(req, sequelize, databaseModels,
@@ -348,21 +352,30 @@ app.get("/administrative/discussion/:discussionUID/:command", function(req, res)
 	}
 });
 
-
+// handle is loggedIn, the handle delete class, otherwise redirect to index
 app.get("/schedule", function(req, res) {
-	schedule.listClasses(req, sequelize, databaseModels, function(classes) {
-		res.render("schedule", {
-			"listOfDepartment": discussion.getListOfDepartment(),
-			"user": req.session.user,
-			"classSchedules": classes
+	if (req.session.user) {
+		schedule.listClasses(req, sequelize, databaseModels, function(classes) {
+			res.render("schedule", {
+				"listOfDepartment": discussion.getListOfDepartment(),
+				"user": req.session.user,
+				"classSchedules": classes
+			});
 		});
-	});
+	} else {
+		res.redirect("/login");
+	}
 });
 
+// handle deleteclass class if user is loggedIn
 app.get("/schedule/:departmentCode/:classNumber/deleteclass", function(req, res) {
-	schedule.deleteClass(req, sequelize, databaseModels, function(classes) {
-		res.redirect("/schedule");
-	});
+	if (user.session.user) {
+		schedule.deleteClass(req, sequelize, databaseModels, function(classes) {
+			res.redirect("/schedule");
+		});
+	} else {
+		red.redirect("/login");
+	}
 });
 
 /*
@@ -463,6 +476,7 @@ app.post("/submitnews", function(req, res) {
 });
 
 
+// if user is logged-in, then handle user's requests given departmentName and departmentCode, otherwise redirect to index
 app.post("/discussion", function(req, res) {
 	if (req.session.user) {
 		res.redirect("/discussion/" + req.body.departmentCode + "/" + req.body.classNumber);
@@ -471,6 +485,7 @@ app.post("/discussion", function(req, res) {
 	}
 });
 
+// if user is logged-in, get the list of discussions by given class, otherwise redirect to index
 app.post("/postdiscussion/:departmentCode/:classNumber", function(req, res) {
 	if (req.session.user) {
 		text = req.body.discussionText;
