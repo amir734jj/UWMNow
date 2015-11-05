@@ -52,12 +52,12 @@ block content
 								span(class="label label-danger") Unapproved
 							|  posted on #{moment(new Date(item.newsDate)).format('MM/DD/YYYY - hh:mm')} by #{item.initial}
 							.btn-group.pull-right
-								a(class="btn btn-default", href="administrative/postnews/#{item.newsUID}/approvenews")
-									| approve
-								a(class="btn btn-default", href="administrative/postnews/#{item.newsUID}/unapprovenews")
-									| unapprove
-								a(class="btn btn-default", href="administrative/postnews/#{item.newsUID}/deletenews")
-									| delete											
+								a(class="btn btn-success", href="administrative/postnews/#{item.newsUID}/approvenews")
+									| Approve
+								a(class="btn btn-warning", href="administrative/postnews/#{item.newsUID}/unapprovenews")
+									| Unapprove
+								a(class="btn btn-danger", href="administrative/postnews/#{item.newsUID}/deletenews")
+									| Delete											
 						p
 							| #{item.newsText}
 		- else					
@@ -76,12 +76,12 @@ block content
 								span(class="label label-danger") Unapproved
 							|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by #{discussionItem.initial} for #{discussionItem.className}
 							.btn-group.pull-right
-								a(class="btn btn-default", href="administrative/discussion/#{discussionItem.discussionUID}/approvediscussion")
-									| approve
-								a(class="btn btn-default", href="administrative/discussion/#{discussionItem.discussionUID}/unapprovediscussion")
-									| unapprove
-								a(class="btn btn-default", href="administrative/discussion/#{discussionItem.discussionUID}/deletediscussion")
-									| delete
+								a(class="btn btn-success", href="administrative/discussion/#{discussionItem.discussionUID}/approvediscussion")
+									| Approve
+								a(class="btn btn-warning", href="administrative/discussion/#{discussionItem.discussionUID}/unapprovediscussion")
+									| Unapprove
+								a(class="btn btn-danger", href="administrative/discussion/#{discussionItem.discussionUID}/deletediscussion")
+									| Delete
 
 						| !{discussionItem.discussionText}
 

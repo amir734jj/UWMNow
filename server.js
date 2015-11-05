@@ -122,16 +122,31 @@ app.get("/", function(req, res) {
 			function(news) {
 				discussion.getAllApprovedDiscussion(req, sequelize, databaseModels, function(discussions) {
 					weather.getData(forecast, function(weather) {
-						res.render("main", {
-							"loggedIn": true,
-							"user": req.session.user,
-							"news": news,
-							"weather": weather,
-							"discussions": discussions
+						schedule.listClasses(req, sequelize, databaseModels, function(classes) {
+							res.render("main", {
+								"loggedIn": true,
+								"user": req.session.user,
+								"news": news,
+								"weather": weather,
+								"discussions": discussions,
+								"classSchedules": classes
+							});
 						});
 					});
 				});
 			});
+	} else {
+		res.render("main");
+	}
+});
+
+
+app.get("/about", function(req, res) {
+	if (req.session.user) {
+		res.render("about", {
+			"standalone": true,
+			"user": req.session.user
+		});
 	} else {
 		res.render("main");
 	}
@@ -334,6 +349,22 @@ app.get("/administrative/discussion/:discussionUID/:command", function(req, res)
 });
 
 
+app.get("/schedule", function(req, res) {
+	schedule.listClasses(req, sequelize, databaseModels, function(classes) {
+		res.render("schedule", {
+			"listOfDepartment": discussion.getListOfDepartment(),
+			"user": req.session.user,
+			"classSchedules": classes
+		});
+	});
+});
+
+app.get("/schedule/:departmentCode/:classNumber/deleteclass", function(req, res) {
+	schedule.deleteClass(req, sequelize, databaseModels, function(classes) {
+		res.redirect("/schedule");
+	});
+});
+
 /*
  *	POST Requests:
  *		register
@@ -341,6 +372,13 @@ app.get("/administrative/discussion/:discussionUID/:command", function(req, res)
  *		accountupdate
  *		submitnews
  */
+
+
+app.post("/addSchedule", function(req, res) {
+	schedule.addClass(req, sequelize, databaseModels, function(classes) {
+		res.redirect("/schedule");
+	});
+});
 
 // if user is logged-in, then redirect to index, otherwise handle register user
 app.post("/register", function(req, res) {
@@ -460,7 +498,6 @@ app.post("/postdiscussion/:departmentCode/:classNumber", function(req, res) {
 		res.redirect("/login");
 	}
 });
-
 
 console.log("UWMNow! started and it can be accessed at port :80");
 console.log("Address: " + rootURL + ":80");

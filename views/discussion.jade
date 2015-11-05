@@ -9,7 +9,7 @@ block content
 				label.control-label.col-sm-2 Department name:
 				.col-sm-10
 					select(class="form-control", id="listOfDepartment", name="departmentCode")
-						- each departmentCode, departmentName in listOfDepartment
+						- each departmentName, departmentCode in listOfDepartment
 							option(value="#{departmentCode}")
 								| #{departmentName}
 
@@ -25,20 +25,20 @@ block content
 		- if(discussionsByYou)
 			hr
 			- if(discussionsByYou.length > 0)
-				h3(style="color: green;") List of discussions posts by you:
+				h3(style="color: green;") List of discussion posts by you:
 
 				- each discussionItem in discussionsByYou
 					div(class="panel panel-default")
-						div(class="panel-panel")
-							h5
-								- if (discussionItem.discussionApprove)
-									span(class="label label-success") Approved
-								- else
-									span(class="label label-danger") Unapproved
-								|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by #{discussionItem.initial} for #{discussionItem.className}
-								a(class="btn btn-default pull-right", href="/discussion/deletediscussion/#{discussionItem.discussionUID}")
-									| delete
-
+						div(class="panel-heading", style="font-weight: bold;")
+							- if (discussionItem.discussionApprove)
+								span(class="label label-success") Approved
+							- else
+								span(class="label label-danger") Unapproved
+							|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by #{discussionItem.initial} for #{discussionItem.className}
+							a(class="btn btn-danger pull-right", href="/discussion/deletediscussion/#{discussionItem.discussionUID}")
+								| Delete
+							.clearfix
+						div(class="panel-body")
 							| !{discussionItem.discussionText}
 			- else
-				h3(style="color: red;") You have not posted in any discussion thread
+				h3(style="color: red;") You have not posted in any discussion thread!

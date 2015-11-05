@@ -32,6 +32,13 @@ html(lang="en")
 						span.fa.fa-cubes
 						| &nbsp UWM Now!
 				.collapse.navbar-collapse(id="navigationbar")
+					ul.nav.navbar-nav.navbar-left
+						- if (user)
+							li
+								a(href="/about")
+									i(class="fa fa-diamond")
+									| &nbsp About Us
+								
 					ul.nav.navbar-nav.navbar-right
 						- if (user && user.admin)
 							li
@@ -68,6 +75,7 @@ html(lang="en")
 								a(href="/login")
 									i(class="fa fa-sign-in")
 									| &nbsp Login
+			
 		.container
 			.jumbotron
 				block content

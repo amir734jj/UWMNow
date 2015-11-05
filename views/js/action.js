@@ -25,4 +25,6 @@
  				$editable.replace(/(<([^>]+)>)/ig, "").length + " characters)");
  		}
  	});
+
+ 	$.fn.modal.Constructor.prototype.enforceFocus = function() {};
  });

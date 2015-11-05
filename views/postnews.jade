@@ -16,14 +16,16 @@ block content
 		h3(style="color: green;") List of news posted by you (in chronological order):
 		- each item in news
 			div(class="panel panel-default")
-				div(class="panel-panel")
-					h5
-						- if (item.newsApprove)
-							span(class="label label-success approve") Approved
-						- else
-							span(class="label label-danger approve") Unapproved
-						|  posted on #{moment(new Date(item.newsDate)).format('MM/DD/YYYY - hh:mm')} by #{item.initial}
-						a(class="btn btn-default pull-right", href="postnews/#{item.newsUID}/deletenews")
-							| delete
-					p
-						| #{item.newsText}
+				div(class="panel-heading", style="font-weight: bold;")
+					- if (item.newsApprove)
+						span(class="label label-success approve") Approved
+					- else
+						span(class="label label-danger approve") Unapproved
+					| Posted on #{moment(new Date(item.newsDate)).format("MM/DD/YYYY - hh:mm")} by #{item.initial}
+					
+					a(class="btn btn-danger pull-right", href="postnews/#{item.newsUID}/deletenews")
+							| Delete
+					.clearfix
+						
+				div(class="panel-body")
+					| #{item.newsText}

@@ -6,55 +6,144 @@ block content
 		- if(user)
 			h2 Welcome #{user.firstName} to UWM Now!
 
-			.col-md-4
-				h3 Campus Weather now:
-					img(src="svg/weather/#{weather.currently.icon}.svg", class="weather-icon")
 
-				ul.list-group
-					li.list-group-item Forecast will be #{weather.daily.summary}
-					li.list-group-item Current temperature is #{weather.currently.temperature}
+			ul.nav.nav-tabs
+				li.active
+					a(data-toggle='tab', href='#home') Campus Weather
+				li
+					a(data-toggle='tab', href='#menu1') Latest News
+				li
+					a(data-toggle='tab', href='#menu2') Latest Discussions
+				li
+					a(data-toggle='tab', href='#menu3') Class Schedule
+			.tab-content
+				#home.tab-pane.fade.in.active
+					h3.headItem Campus Weather now:
+						img(src="svg/weather/#{weather.currently.icon}.svg", class="weather-icon")
+						| #{weather.currently.temperature}
+						sup  F
+					h4(style="line-height: 150%;")
+						| Forecast will be #{weather.daily.summary}
+						| Current temperature is #{weather.currently.temperature}
 						sup  F
 						|  and it will #{weather.hourly.summary}
 
-			.col-md-4
-				h3(style="color: green;") List of news posted by students (in chronological order):
-				
-				- each item in news
-					div(class="panel panel-default")
-						div(class="panel-panel")
-							h5
-								|  Posted on #{moment(new Date(item.newsDate)).format('MM/DD/YYYY - hh:mm')} by #{item.initial}
-							
-							p 
-								| #{item.newsText}
-			.col-md-4
-				h3(style="color: green;") List of discussion posts by students (in chronological order):
-				- each discussionItem in discussions
-					ul.list-group
-						a(href="/discussion/#{discussionItem.departmentCode}/#{discussionItem.classNumber}")
-							li.list-group-item Discussion post on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by #{discussionItem.initial} for #{discussionItem.className}
+					.col-md-8
+						table.table.table-condensed.table-hover
+							thead
+								tr
+									th Hour
+									th Temperature
+									th Summary
+							tbody
+								- for (var i = 0; i < 7; ++i)
+									tr
+										td
+											| #{moment(new Date().setHours(new Date().getHours() + i)).format('MM/DD - hh A')}
+										td
+											| #{weather.hourly.data[i].temperature}
+											sup  F
+										td
+											| #{weather.hourly.data[i].summary}
+
+					.col-md-4
+						table.table.table-condensed.table-hover
+							thead
+								tr
+									th Day
+									th Summary
+							tbody
+								- for (var i = 0; i < 7; ++i)
+									tr
+										td
+											| #{moment(new Date().setDate(new Date().getDate() + i)).format('dddd')}
+										td
+											| #{weather.daily.data[i].summary}										
+
+
+
+				#menu1.tab-pane.fade
+					h3(style="color: green;") Latest news posts by students (in chronological order):
+
+					- each item in news
+						div(class="panel panel-default")
+							div(class="panel-heading", style="font-weight: bold;")
+								- if (item.newsApprove)
+									span(class="label label-success approve") Approved
+								- else
+									span(class="label label-danger approve") Unapproved
+								| Posted on #{moment(new Date(item.newsDate)).format("MM/DD/YYYY - hh:mm")} by #{item.initial}
 								
+								.clearfix
+									
+							div(class="panel-body")
+								| #{item.newsText}
+									
+									
+									
+				#menu2.tab-pane.fade
+					h3(style="color: green;") Latest discussion posts by students (in chronological order):
+
+					- each discussionItem in discussions
+						ul.list-group
+							a(href="/discussion/#{discussionItem.departmentCode}/#{discussionItem.classNumber}")
+								li.list-group-item Discussion post on #{moment(new Date(discussionItem.discussionDate)).format("MM/DD/YYYY - hh:mm")} by #{discussionItem.initial} for #{discussionItem.className}
+				#menu3.tab-pane.fade
+					h3(style="color: green;") Weekly schedule and associated discussion threads:
+					table.table.table-condensed.table-hover
+						thead
+							tr
+								th Class name
+								th Class date
+								th Count of registered students
+								th Count of discussions
+								th Delete class
+						tbody
+							- each value, key in classSchedules
+								tr
+									th= value.classDepartment + "-" + value.classNumber
+
+									th
+										| #{value.classDate.toString().toUpperCase().split(",").join("  ")}
+									th= value.countOfRegisteredStudents
+									th= value.discussionsCount
+
+									th
+										.btn-group
+											a(class="btn btn-success", href="/discussion/#{value.classDepartment}/#{value.classNumber}") Discussion Thread
+
 		- else
 			.page-header
 				h2 Welcome to UWM Now!
 				h3
-					| This is portal for UWM students to:
-				ul
-					li communicate with their fellow students
-					li have a class discussion
-					li be a successful in their studies. Work Smart, Not Hard
+					| This is portal for students at UW-Milwaukee campus to:
+				ul(style="font-size: 110%;")
+					li communicate with fellow students
+					li have a class effective discussion
+					li be successful in studies. Work Smart, Not Hard
 				h4
-					| If you are a UWM student, Please register.
-			div
+					| If you are a UWM student, Please register (using your @uwm.edu email)
+			.container
 				.col-md-4.figureGeneral
 					img(src="svg/figures/classroom.svg", class="figure")
 					.caption
-						| Due to the time constraints, almost in all of the classes there is not time for constructive discussion or maybe students are afraid of asking questions. In addition, discussions on D2L are generally not being used as students are afraid of being judged.
+						| Due to the time constraints, almost in all of the classes there is no time for constructive discussions and possibly students are afraid of asking questions. In addition, discussions on D2L are generally not being used as students are afraid of being judged.
 				.col-md-4.figureGeneral
 					img(src="svg/figures/discussion.svg",class="figure")
 					.caption
-						| Having a true discussion with your fellow classmates without being afraid of being judge can result in more learning and more engagement with studies.
+						| Having a true discussion with fellow classmates without being afraid of being judge can result in more effective learning experience and more engagement with studies.
 				.col-md-4.figureGeneral
 					img(src="svg/figures/success.svg", class="figure")
 					.caption
-						| Being more engaged with class, means more likelihood of more study time and being aware of the situation. These can result in higher grade and success.
+						| Being more engaged with class and fellow students, means more likelihood of more study time and being aware of the situation. These factors can result in higher grades and successful learning.
+			hr
+			.container.text-center
+				h3(style="font-style: italic;") Cerated by UWM students for UWM students
+				.col-sm-5.col-md-6
+					img.img-circle(src="images/amir.jpg", alt="Amir, B.S.", class="profile-image")
+					h4 Amir, B.S. in C.S. from UWM
+
+
+				.col-sm-5.col-sm-offset-2.col-md-6.col-md-offset-0
+					img.img-circle(src="images/sean.jpg", alt="Sean, B.S.", class="profile-image")
+					h4 Sean, B.S. in C.S. from UWM	
