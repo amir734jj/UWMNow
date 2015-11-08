@@ -1,0 +1,21 @@
+extends ./layout.jade
+
+block content
+	.col-md-8
+		h2
+			|  #{profile.firstName}  #{profile.lastName}
+		.clearfix
+		h4
+			a(href="mailto:#{profile.email}?Subject=Visitor form UWMNow!", target="_top") Send Email to #{profile.email}
+		h4 Major: #{profile.extendedProfile.major}
+		h4 Bio:
+		p
+			| #{profile.extendedProfile.bio}
+			
+	.col-md-4.hidden-sm
+		- if (profile.extendedProfile.profile_image && profile.extendedProfile.profile_image == true)
+			img(src="/profile_image/#{profile.extendedProfile.filename}", class="img-rounded", width="304", height="236")
+		- else
+			canvas(data-jdenticon-hash="#{profile.hashcode}", class="img-rounded", width="304", height="236")
+	
+	.clearfix

@@ -72,22 +72,30 @@ block content
 									span(class="label label-success approve") Approved
 								- else
 									span(class="label label-danger approve") Unapproved
-								| Posted on #{moment(new Date(item.newsDate)).format("MM/DD/YYYY - hh:mm")} by #{item.initial}
-								
+								| Posted on #{moment(new Date(item.newsDate)).format("MM/DD/YYYY - hh:mm")} by 
+								a(href="profile/#{item.user.hashcode}") #{item.initial}
+
 								.clearfix
-									
+
 							div(class="panel-body")
 								| #{item.newsText}
-									
-									
-									
+
+
+
 				#menu2.tab-pane.fade
 					h3(style="color: green;") Latest discussion posts by students (in chronological order):
 
 					- each discussionItem in discussions
 						ul.list-group
-							a(href="/discussion/#{discussionItem.departmentCode}/#{discussionItem.classNumber}")
-								li.list-group-item Discussion post on #{moment(new Date(discussionItem.discussionDate)).format("MM/DD/YYYY - hh:mm")} by #{discussionItem.initial} for #{discussionItem.className}
+							li.list-group-item
+								a(href="/discussion/#{discussionItem.departmentCode}/#{discussionItem.classNumber}")
+									| Discussion post on #{moment(new Date(discussionItem.discussionDate)).format("MM/DD/YYYY - hh:mm")}
+								|  by  
+								a(href="profile/#{discussionItem.user.hashcode}") #{discussionItem.initial}
+								|  for  
+								a(href="/discussion/#{discussionItem.departmentCode}/#{discussionItem.classNumber}") #{discussionItem.className}
+
+
 				#menu3.tab-pane.fade
 					h3(style="color: green;") Weekly schedule and associated discussion threads:
 					table.table.table-condensed.table-hover

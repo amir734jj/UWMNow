@@ -146,8 +146,9 @@ exports.getAllApprovedDiscussion = function(req, db, models, callback) {
 								hashcode: discussionItem.hashcode
 							}
 						}).done(function(userItem) {
-							discussionItem.initial = userItem.firstName.charAt(0).toUpperCase() + "." +
+							discussionItem.initial = userItem.firstName.ucfirst() + ". " +
 								userItem.lastName.charAt(0).toUpperCase() + ".";
+							discussionItem.user = userItem;
 							discussionItem.className = classItem.classDepartment + "-" + classItem.classNumber;
 							discussionItem.departmentCode = classItem.classDepartment;
 							discussionItem.classNumber = classItem.classNumber;
@@ -187,8 +188,9 @@ exports.getAllDiscussion = function(req, db, models, callback) {
 								hashcode: discussionItem.hashcode
 							}
 						}).done(function(userItem) {
-							discussionItem.initial = userItem.firstName.charAt(0).toUpperCase() + "." +
+							discussionItem.initial = userItem.firstName.ucfirst() + ". " +
 								userItem.lastName.charAt(0).toUpperCase() + ".";
+							discussionItem.user = userItem;
 							discussionItem.className = classItem.classDepartment + "-" + classItem.classNumber;
 							discussionItem.departmentCode = classItem.classDepartment;
 							discussionItem.classNumber = classItem.classNumber;
@@ -232,10 +234,10 @@ exports.getDiscussionByClass = function(req, db, models, callback) {
 								hashcode: discussionItem.hashcode
 							}
 						}).done(function(user) {
-							discussionItem.initial = user.firstName.charAt(0).toUpperCase() + "." +
+							discussionItem.initial = user.firstName.ucfirst() + ". " +
 								user.lastName.charAt(0).toUpperCase() + ".";
 							discussionItem.className = classItem.classDepartment + "-" + classItem.classNumber;
-
+							discussionItem.user = user;
 							if (req.session.user.hashcode === user.hashcode) {
 								discussionItem.userSelf = true;
 							}
@@ -274,8 +276,9 @@ exports.getDiscussionByUser = function(req, db, models, callback) {
 							classUID: discussionItem.classUID
 						}
 					}).done(function(classItem) {
+						discussionItem.user = req.session.user;
 						discussionItem.className = classItem.classDepartment + "-" + classItem.classNumber;
-						discussionItem.initial = req.session.user.firstName.charAt(0).toUpperCase() + "." +
+						discussionItem.initial = req.session.user.firstName.ucfirst() + ". " +
 							req.session.user.lastName.charAt(0).toUpperCase() + ".";
 						if (count === discussions.length - 1)
 							callback(discussions);

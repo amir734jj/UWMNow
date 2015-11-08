@@ -1,36 +1,37 @@
 {
-	"name": "uwmnow!",
-	"version": "1.0.0",
-	"main": "server.js",
-	"dependencies": {
-		"body-parser": "^1.14.1",
-		"cookie-parser": "^1.4.0",
-		"express": "^4.13.3",
-		"forecast": "^0.2.1",
-		"jade": "^1.11.0",
-		"moment": "^2.10.6",
-		"sequelize": "^3.12.1",
-		"sha1": "^1.1.1",
-		"sqlite3": "^3.1.0",
-		"underscore": "^1.8.3",
-		"connect-session-sequelize": "^2.3.1",
-		"express-session": "^1.12.1",
-		"nodemailer": "^1.8.0"
-	},
-	"devDependencies": {},
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "node server.js"
-	},
-	"author": "Amir, Sean",
-	"license": "Apache-2.0",
-	"description": "UWMNow!",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/amir734jj/UWMNow.git"
-	},
-	"bugs": {
-		"url": "https://github.com/amir734jj/UWMNow/issues"
-	},
-	"homepage": "https://github.com/amir734jj/UWMNow#readme"
+  "name": "uwmnow!",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "connect-session-sequelize": "^2.3.1",
+    "cookie-parser": "^1.4.0",
+    "express": "^4.13.3",
+    "express-session": "^1.12.1",
+    "forecast": "^0.2.1",
+    "jade": "^1.11.0",
+    "moment": "^2.10.6",
+    "multer": "^1.1.0",
+    "nodemailer": "^1.8.0",
+    "sequelize": "^3.12.1",
+    "sha1": "^1.1.1",
+    "sqlite3": "^3.1.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Amir, Sean",
+  "license": "Apache-2.0",
+  "description": "UWMNow!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amir734jj/UWMNow.git"
+  },
+  "bugs": {
+    "url": "https://github.com/amir734jj/UWMNow/issues"
+  },
+  "homepage": "https://github.com/amir734jj/UWMNow#readme"
 }

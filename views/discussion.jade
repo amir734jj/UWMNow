@@ -34,7 +34,9 @@ block content
 								span(class="label label-success") Approved
 							- else
 								span(class="label label-danger") Unapproved
-							|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by #{discussionItem.initial} for #{discussionItem.className}
+							|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by 
+							a(href="/profile/#{user.hashcode}") #{discussionItem.initial} 
+							| for #{discussionItem.className}
 							a(class="btn btn-danger pull-right", href="/discussion/deletediscussion/#{discussionItem.discussionUID}")
 								| Delete
 							.clearfix

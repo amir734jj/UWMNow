@@ -27,6 +27,12 @@ exports.initialize = function(db, Sequelize) {
 		},
 		listOfSubscribedClasses: {
 			type: Sequelize.BLOB
+		},
+		memberSince: {
+			type: Sequelize.DATE
+		},
+		extendedProfile: {
+			type: Sequelize.TEXT
 		}
 	}, {
 		freezeTableName: true

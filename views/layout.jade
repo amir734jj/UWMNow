@@ -12,11 +12,11 @@ html(lang="en")
 		link(rel="stylesheet", href="/css/summernote.css")
 		link(rel="stylesheet", href="/css/summernote-bs3.css")
 
-
 		script(src="/js/jquery.min.js")
 		script(src="/js/bootstrap.min.js")
 		script(src="/js/select2.min.js")
 		script(src="/js/summernote.js")
+		script(src="/js/jdenticon.min.js")
 		script(src="/js/action.js")
 
 		block head
@@ -38,7 +38,7 @@ html(lang="en")
 								a(href="/about")
 									i(class="fa fa-diamond")
 									| &nbsp About Us
-								
+
 					ul.nav.navbar-nav.navbar-right
 						- if (user && user.admin)
 							li
@@ -75,7 +75,7 @@ html(lang="en")
 								a(href="/login")
 									i(class="fa fa-sign-in")
 									| &nbsp Login
-			
+
 		.container
 			.jumbotron
 				block content

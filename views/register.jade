@@ -2,7 +2,7 @@ extends ./layout.jade
 
 block content
 	.container
-		h3 Please Register
+		h3 Please Register:
 		if(unauthorized)
 			div.alert.alert-danger #{message}
 		form(role="form", action="/register", method="post", required)

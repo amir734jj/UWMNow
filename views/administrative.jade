@@ -50,7 +50,8 @@ block content
 								span(class="label label-success") Approved
 							- else
 								span(class="label label-danger") Unapproved
-							|  posted on #{moment(new Date(item.newsDate)).format('MM/DD/YYYY - hh:mm')} by #{item.initial}
+							|  posted on #{moment(new Date(item.newsDate)).format('MM/DD/YYYY - hh:mm')} by 
+							a(href="/profile/#{item.user.hashcode}") #{item.initial}
 							.btn-group.pull-right
 								a(class="btn btn-success", href="administrative/postnews/#{item.newsUID}/approvenews")
 									| Approve
@@ -74,7 +75,9 @@ block content
 								span(class="label label-success") Approved
 							- else
 								span(class="label label-danger") Unapproved
-							|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by #{discussionItem.initial} for #{discussionItem.className}
+							|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by 
+							a(href="/profile/#{discussionItem.user.hashcode}") #{discussionItem.initial} 
+							| for #{discussionItem.className}
 							.btn-group.pull-right
 								a(class="btn btn-success", href="administrative/discussion/#{discussionItem.discussionUID}/approvediscussion")
 									| Approve

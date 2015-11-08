@@ -2,7 +2,7 @@ extends ./layout.jade
 
 block content
 	.container
-		h3 Please Login
+		h3 Please Login:
 		if(unauthorized)
 			div.alert.alert-danger #{message}
 		form(role="form", action="/login", method="post", required)

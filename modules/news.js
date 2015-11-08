@@ -27,8 +27,9 @@ exports.listApprovedNews = function(req, db, newsModel, userModel, callback) {
 				_.map(users, function(user) {
 					if (newsItem.hashcode === user.hashcode) {
 						newsItem.email = user.email;
-						newsItem.initial = user.firstName.charAt(0).toUpperCase() + "." +
+						newsItem.initial = user.firstName.ucfirst() + ". " +
 							user.lastName.charAt(0).toUpperCase() + ".";
+						newsItem.user = user;
 					}
 				});
 			});
@@ -51,8 +52,9 @@ exports.listUnapprovedNews = function(req, db, newsModel, userModel, callback) {
 				_.map(users, function(user) {
 					if (newsItem.hashcode === user.hashcode) {
 						newsItem.email = user.email;
-						newsItem.initial = user.firstName.charAt(0).toUpperCase() + "." +
+						newsItem.initial = user.firstName.ucfirst() + ". " +
 							user.lastName.charAt(0).toUpperCase() + ".";
+						newsItem.user = user;
 					}
 				});
 			});
@@ -73,8 +75,9 @@ exports.listNewsByUser = function(req, db, newsModel, callback) {
 		_.map(news, function(newsItem) {
 			if (newsItem.hashcode === req.session.user.hashcode) {
 				newsItem.email = req.session.user.email;
-				newsItem.initial = req.session.user.firstName.charAt(0).toUpperCase() +
-					"." + req.session.user.lastName.charAt(0).toUpperCase() + ".";
+				newsItem.initial = req.session.user.firstName.ucfirst() +
+					". " + req.session.user.lastName.charAt(0).toUpperCase() + ".";
+				newsItem.user = req.session.user;
 			}
 		})
 		callback(news);

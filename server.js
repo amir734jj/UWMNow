@@ -11,8 +11,25 @@ var SequelizeStore = require("connect-session-sequelize")(session.Store);
 var encrypt = require("sha1");
 var mailer = require("nodemailer");
 var app = express();
+var multer = require('multer')
+var fs = require("fs");
 
-// initialize custom modules
+var storage = multer.diskStorage({
+	destination: './uploads/',
+	filename: function(req, file, cb) {
+		if (req.session.user) {
+			cb(null, req.session.user.hashcode + "." + getFileExt(file.originalname));
+		} else {
+			cb(null, false);
+		}
+	}
+});
+
+var upload = multer({
+	"storage": storage
+});
+
+// initialize custom modules;
 var authentication = require("./modules/authentication.js");
 var schedule = require("./modules/schedule.js");
 var weather = require("./modules/weather.js");
@@ -173,8 +190,14 @@ app.get("/login", function(req, res) {
 // if user is logged-in, then render account information, otherwise redirect to login
 app.get("/account", function(req, res) {
 	if (req.session.user) {
+		var user = JSON.parse(JSON.stringify(req.session.user));
+		try {
+			user.extendedProfile = JSON.parse(user.extendedProfile);
+		} catch (e) {
+			user.extendedProfile = JSON.parse(JSON.stringify(user.extendedProfile));
+		}
 		res.render("myaccount", {
-			"user": req.session.user
+			"user": user
 		});
 	} else {
 		res.redirect("/login");
@@ -369,10 +392,50 @@ app.get("/schedule", function(req, res) {
 
 // handle deleteclass class if user is loggedIn
 app.get("/schedule/:departmentCode/:classNumber/deleteclass", function(req, res) {
-	if (user.session.user) {
+	if (req.session.user) {
 		schedule.deleteClass(req, sequelize, databaseModels, function(classes) {
 			res.redirect("/schedule");
 		});
+	} else {
+		red.redirect("/login");
+	}
+});
+
+// handle user profile
+app.get("/profile/:hashcode", function(req, res) {
+	authentication.getUserByHashcode(req, sequelize, databaseModels.userModel, function(user) {
+		var userItem = JSON.parse(JSON.stringify(user));
+		try {
+			userItem.extendedProfile = JSON.parse(user.extendedProfile);
+		} catch (e) {
+			userItem.extendedProfile = JSON.parse(JSON.stringify(user.extendedProfile));
+		}
+		res.render("profile", {
+			"user": req.session.user,
+			"profile": userItem
+		});
+	});
+});
+
+// send image file
+app.get("/profile_image/:filename", function(req, res) {
+	if (req.session.user) {
+		res.sendFile("/uploads/" + req.params.filename, {
+			root: __dirname
+		});
+	} else {
+		red.redirect("/login");
+	}
+
+});
+
+// delete image file
+app.get("/profile_image/:filename/delete", function(req, res) {
+	if (req.session.user) {
+		authentication.deletePhoto(req, sequelize, databaseModels.userModel, function(rows) {
+			fs.unlinkSync("./uploads/" + req.params.filename);
+			res.redirect("/logout");
+		})
 	} else {
 		red.redirect("/login");
 	}
@@ -453,7 +516,7 @@ app.post("/login", function(req, res) {
 });
 
 // if user is logged-in, then handle update account, otherwise redirect to index
-app.post("/accountupdate", function(req, res) {
+app.post("/accountupdate", upload.single('image'), function(req, res) {
 	if (req.session.user) {
 		authentication.updateAccount(req, sequelize, databaseModels.userModel,
 			function(user) {
@@ -513,6 +576,20 @@ app.post("/postdiscussion/:departmentCode/:classNumber", function(req, res) {
 		res.redirect("/login");
 	}
 });
+
+
+// prototypes
+String.prototype.ucfirst = function() {
+	return this.charAt(0).toUpperCase() + this.substr(1);
+}
+
+var getFileExt = function(fileName) {
+	var fileExt = fileName.split(".");
+	if (fileExt.length === 1 || (fileExt[0] === "" && fileExt.length === 2)) {
+		return "";
+	}
+	return fileExt.pop();
+}
 
 console.log("UWMNow! started and it can be accessed at port :80");
 console.log("Address: " + rootURL + ":80");
