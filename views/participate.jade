@@ -30,19 +30,20 @@ block content
 
 				- each discussionItem in discussionsByClass
 					div(class="panel panel-default")
-						div(class="panel-panel")
-							h5
-								- if (discussionItem.discussionApprove)
-									span(class="label label-success") Approved
-								- else
-									span(class="label label-danger") Unapproved
-								|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by 
-								a(href="/profile/#{discussionItem.user.hashcode}") #{discussionItem.initial} 
-								|  for #{discussionItem.className}
-								- if (discussionItem.userSelf)
-									a(class="btn btn-danger pull-right", href="/discussion/#{departmentCode}/#{classNumber}/deletediscussion/#{discussionItem.discussionUID}")
-										| Delete
+						div(class="panel-heading", style="font-weight: bold;")
+							- if (discussionItem.discussionApprove)
+								span(class="label label-success") Approved
+							- else
+								span(class="label label-danger") Unapproved
+							|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by 
+							a(href="/profile/#{discussionItem.user.hashcode}") #{discussionItem.initial} 
+							|  for #{discussionItem.className}
+							- if (discussionItem.userSelf)
+								a(class="btn btn-danger pull-right", href="/discussion/#{departmentCode}/#{classNumber}/deletediscussion/#{discussionItem.discussionUID}")
+									| Delete
+							.clearfix
 
+						div(class="panel-body")
 							| !{discussionItem.discussionText}
 			- else
 				h3(style="color: red;") There is no discussion post for #{className}

@@ -44,23 +44,24 @@ block content
 			h3(style="color: green;") List of news posted by students (in chronological order):
 			- each item in news
 				div(class="panel panel-default")
-					div(class="panel-panel")
-						h5
-							- if (item.newsApprove)
-								span(class="label label-success") Approved
-							- else
-								span(class="label label-danger") Unapproved
-							|  posted on #{moment(new Date(item.newsDate)).format('MM/DD/YYYY - hh:mm')} by 
-							a(href="/profile/#{item.user.hashcode}") #{item.initial}
-							.btn-group.pull-right
-								a(class="btn btn-success", href="administrative/postnews/#{item.newsUID}/approvenews")
-									| Approve
-								a(class="btn btn-warning", href="administrative/postnews/#{item.newsUID}/unapprovenews")
-									| Unapprove
-								a(class="btn btn-danger", href="administrative/postnews/#{item.newsUID}/deletenews")
-									| Delete											
-						p
-							| #{item.newsText}
+					div(class="panel-heading", style="font-weight: bold;")
+						- if (item.newsApprove)
+							span(class="label label-success") Approved
+						- else
+							span(class="label label-danger") Unapproved
+						|  posted on #{moment(new Date(item.newsDate)).format('MM/DD/YYYY - hh:mm')} by 
+						a(href="/profile/#{item.user.hashcode}") #{item.initial}
+						.btn-group.pull-right
+							a(class="btn btn-success", href="administrative/postnews/#{item.newsUID}/approvenews")
+								| Approve
+							a(class="btn btn-warning", href="administrative/postnews/#{item.newsUID}/unapprovenews")
+								| Unapprove
+							a(class="btn btn-danger", href="administrative/postnews/#{item.newsUID}/deletenews")
+								| Delete											
+						.clearfix
+
+					div(class="panel-body")
+						| #{item.newsText}
 		- else					
 			h3(style="color: red;") There is no news yet to be Approved
 
@@ -69,24 +70,25 @@ block content
 			h3(style="color: green;") List of discussions posted by students (in chronological order):
 			- each discussionItem in discussions
 				div(class="panel panel-default")
-					div(class="panel-panel")
-						h5
-							- if (discussionItem.discussionApprove)
-								span(class="label label-success") Approved
-							- else
-								span(class="label label-danger") Unapproved
-							|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by 
-							a(href="/profile/#{discussionItem.user.hashcode}") #{discussionItem.initial} 
-							| for  
-							a(href="/discussion/#{discussionItem.departmentCode}/#{discussionItem.classNumber}") #{discussionItem.className}
-							.btn-group.pull-right
-								a(class="btn btn-success", href="administrative/discussion/#{discussionItem.discussionUID}/approvediscussion")
-									| Approve
-								a(class="btn btn-warning", href="administrative/discussion/#{discussionItem.discussionUID}/unapprovediscussion")
-									| Unapprove
-								a(class="btn btn-danger", href="administrative/discussion/#{discussionItem.discussionUID}/deletediscussion")
-									| Delete
+					div(class="panel-heading", style="font-weight: bold;")
+						- if (discussionItem.discussionApprove)
+							span(class="label label-success") Approved
+						- else
+							span(class="label label-danger") Unapproved
+						|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by 
+						a(href="/profile/#{discussionItem.user.hashcode}") #{discussionItem.initial} 
+						| for  
+						a(href="/discussion/#{discussionItem.departmentCode}/#{discussionItem.classNumber}") #{discussionItem.className}
+						.btn-group.pull-right
+							a(class="btn btn-success", href="administrative/discussion/#{discussionItem.discussionUID}/approvediscussion")
+								| Approve
+							a(class="btn btn-warning", href="administrative/discussion/#{discussionItem.discussionUID}/unapprovediscussion")
+								| Unapprove
+							a(class="btn btn-danger", href="administrative/discussion/#{discussionItem.discussionUID}/deletediscussion")
+								| Delete
+						.clearfix
 
+					div(class="panel-body")
 						| !{discussionItem.discussionText}
 
 		- else					

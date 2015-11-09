@@ -1,14 +1,4 @@
  $(document).ready(function() {
- 	// 	$('.input-group.date').datepicker({
- 	// 		weekStart: 1,
- 	// 		startDate: new Date(),
- 	// 		endDate: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
- 	// 		autoclose: true
- 	// 	});
- 	//
- 	// 	$('.clockpicker').clockpicker({
- 	// 		donetext: 'Done'
- 	// 	});
 
  	$("#listOfDepartment").select2();
 

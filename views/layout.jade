@@ -21,7 +21,7 @@ html(lang="en")
 
 		block head
 	body
-		nav.navbar.navbar-inverse
+		nav.navbar.navbar-default
 			.container-fluid
 				.navbar-header
 					button.navbar-toggle(type="button", data-toggle="collapse", data-target="#navigationbar")
@@ -49,11 +49,11 @@ html(lang="en")
 							li
 								a(href="/search")
 									i(class="fa fa-search")
-									| &nbsp Search user
+									| &nbsp Search User
 							li
 								a(href="/schedule")
 									i(class="fa fa-cog")
-									| &nbsp Weekly schedule
+									| &nbsp Weekly Schedule
 							li
 								a(href="/discussion")
 									i(class="fa fa-comments")
@@ -83,3 +83,10 @@ html(lang="en")
 		.container
 			.jumbotron
 				block content
+
+
+		//- .navbar.navbar-default.navbar-fixed-bottom
+		//- 	.container
+		//- 		a.navbar-btn.btn-danger.btn.pull-right(href='http://youtu.be/zJahlKPCL9g')
+		//- 			i.fa.fa-star
+		//- 			|   Terms of use

@@ -471,15 +471,24 @@ app.post("/search", function(req, res) {
 	if (req.session.user) {
 		authentication.listAccounts(req, sequelize, databaseModels.userModel, function(users) {
 			var profiles = [];
-			_.map(users, function(userItem) {
-				if (JSON.stringify(userItem).indexOf(req.body.search_user) > -1) {
-					profiles.push(userItem);
-				}
-			});
-			res.render("users", {
-				"user": req.session.user,
-				"profiles": profiles
-			});
+
+			if (_.isNull(users) || _.isUndefined(users)) {
+				res.render("users", {
+					"user": req.session.user,
+					"profiles": profiles
+				});
+			} else {
+				_.map(users, function(userItem) {
+					if (JSON.stringify(userItem).toLowerCase().indexOf(req.body.search_user.toLowerCase()) > -1) {
+						profiles.push(userItem);
+					}
+				});
+
+				res.render("users", {
+					"user": req.session.user,
+					"profiles": profiles
+				});
+			}
 		});
 	} else {
 		red.redirect("/login");
