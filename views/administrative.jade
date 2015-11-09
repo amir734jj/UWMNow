@@ -77,7 +77,8 @@ block content
 								span(class="label label-danger") Unapproved
 							|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by 
 							a(href="/profile/#{discussionItem.user.hashcode}") #{discussionItem.initial} 
-							| for #{discussionItem.className}
+							| for  
+							a(href="/discussion/#{discussionItem.departmentCode}/#{discussionItem.classNumber}") #{discussionItem.className}
 							.btn-group.pull-right
 								a(class="btn btn-success", href="administrative/discussion/#{discussionItem.discussionUID}/approvediscussion")
 									| Approve

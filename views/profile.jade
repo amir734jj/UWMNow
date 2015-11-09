@@ -6,16 +6,65 @@ block content
 			|  #{profile.firstName}  #{profile.lastName}
 		.clearfix
 		h4
-			a(href="mailto:#{profile.email}?Subject=Visitor form UWMNow!", target="_top") Send Email to #{profile.email}
+			| Send Email to 
+			a(href="mailto:#{profile.email}?Subject=Visitor form UWMNow!", target="_top") #{profile.email}
 		h4 Major: #{profile.extendedProfile.major}
 		h4 Bio:
 		p
 			| #{profile.extendedProfile.bio}
-			
+		h4 Links:
+		.btn-group
+			a.btn.btn-default(href="#{profile.extendedProfile.linkedin}")
+				i.fa.fa-linkedin-square.fa-2x
+			a.btn.btn-default(href="#{profile.extendedProfile.twitter}")
+				i.fa.fa-twitter-square.fa-2x
+			a.btn.btn-default(href="#{profile.extendedProfile.facebook}")
+				i.fa.fa-facebook-square.fa-2x
 	.col-md-4.hidden-sm
 		- if (profile.extendedProfile.profile_image && profile.extendedProfile.profile_image == true)
 			img(src="/profile_image/#{profile.extendedProfile.filename}", class="img-rounded", width="304", height="236")
 		- else
 			canvas(data-jdenticon-hash="#{profile.hashcode}", class="img-rounded", width="304", height="236")
-	
+
 	.clearfix
+
+	hr
+
+	- if(news && news.length > 0)
+		h3(style="color: green;") List of news posted by students (in chronological order):
+		- each item in news
+			div(class="panel panel-default")
+				div(class="panel-panel")
+					h5
+						- if (item.newsApprove)
+							span(class="label label-success") Approved
+						- else
+							span(class="label label-danger") Unapproved
+						|  posted on #{moment(new Date(item.newsDate)).format('MM/DD/YYYY - hh:mm')} by 
+						a(href="/profile/#{item.user.hashcode}") #{item.initial}										
+					p
+						| #{item.newsText}
+	- else					
+		h3(style="color: red;") This user has not posted any news yet.
+
+
+	hr
+	- if(discussions && discussions.length > 0)	
+		h3(style="color: green;") List of discussions posted by students (in chronological order):
+		- each discussionItem in discussions
+			div(class="panel panel-default")
+				div(class="panel-panel")
+					h5
+						- if (discussionItem.discussionApprove)
+							span(class="label label-success") Approved
+						- else
+							span(class="label label-danger") Unapproved
+						|  posted on #{moment(new Date(discussionItem.discussionDate)).format('MM/DD/YYYY - hh:mm')} by 
+						a(href="/profile/#{discussionItem.user.hashcode}") #{discussionItem.initial}
+						| for  
+						a(href="/discussion/#{discussionItem.departmentCode}/#{discussionItem.classNumber}") #{discussionItem.className}
+
+					| !{discussionItem.discussionText}
+
+	- else					
+		h3(style="color: red;") This user has not participated in any discussion thread yet.

@@ -367,3 +367,51 @@ exports.updateDiscussionByAdmin = function(req, db, models, callback) {
 		});
 	}
 }
+
+
+exports.getAllApprovedDiscussionByGivenUser = function(req, db, models, callback) {
+	models.discussionModel.findAll({
+		where: {
+			discussionApprove: true,
+			hashcode: req.params.hashcode
+		},
+		order: [
+			['discussionDate', 'DESC']
+		],
+		limit: 10
+	}).done(function(discussions) {
+		if (_.isUndefined(discussions) || _.isNull(discussions)) {
+			callback(null);
+		} else {
+			if (discussions.length === 0) {
+				callback(discussions)
+			} else {
+				var count = 0;
+				_.map(discussions, function(discussionItem) {
+					models.classModel.findOne({
+						where: {
+							classUID: discussionItem.classUID
+						}
+					}).done(function(classItem) {
+						models.userModel.findOne({
+							where: {
+								hashcode: discussionItem.hashcode
+							}
+						}).done(function(userItem) {
+							discussionItem.initial = userItem.firstName.ucfirst() + ". " +
+								userItem.lastName.charAt(0).toUpperCase() + ".";
+							discussionItem.user = userItem;
+							discussionItem.className = classItem.classDepartment + "-" + classItem.classNumber;
+							discussionItem.departmentCode = classItem.classDepartment;
+							discussionItem.classNumber = classItem.classNumber;
+							if (count === discussions.length - 1)
+								callback(discussions);
+							else
+								count++;
+						});
+					});
+				});
+			}
+		}
+	});
+}

@@ -118,3 +118,30 @@ exports.updatePostedNewsByAdmin = function(req, db, newsModel, callback) {
 		});
 	}
 }
+
+
+exports.listApprovedNewsByGivenUser = function(req, db, newsModel, userModel, callback) {
+	newsModel.findAll({
+		where: {
+			newsApprove: true,
+			hashcode: req.params.hashcode
+		},
+		order: [
+			['newsDate', 'DESC']
+		]
+	}).done(function(news) {
+		userModel.findAll().done(function(users) {
+			_.map(news, function(newsItem) {
+				_.map(users, function(user) {
+					if (newsItem.hashcode === user.hashcode) {
+						newsItem.email = user.email;
+						newsItem.initial = user.firstName.ucfirst() + ". " +
+							user.lastName.charAt(0).toUpperCase() + ".";
+						newsItem.user = user;
+					}
+				});
+			});
+			callback(news);
+		});
+	});
+}

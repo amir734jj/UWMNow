@@ -28,9 +28,18 @@ block content
 					label Bio (140 characters):
 					textarea.form-control(maxlength="140", name="bio", placeholder="Biography")
 						| #{user.extendedProfile.bio}
+				div.form-group
+					label linkedin:
+					input.form-control(type="url", placeholder="Linkedin", name="linkedin", value="#{user.extendedProfile.linkedin}")
+				div.form-group
+					label Twitter:
+					input.form-control(type="url", placeholder="Twitter", name="twitter", value="#{user.extendedProfile.twitter}")
+				div.form-group
+					label Facebook:
+					input.form-control(type="url", placeholder="Facebook", name="facebook", value="#{user.extendedProfile.facebook}")
 				div.btn-group
 					button.btn.btn-primary(type="submit", autofocus) Update account information
-
+					a.btn.btn-default(href="/profile/#{user.hashcode}") View profile as other users
 			.col-md-4.hidden-sm
 				- if (user.extendedProfile.profile_image && user.extendedProfile.profile_image == true)
 					img(src="profile_image/#{user.extendedProfile.filename}", class="img-rounded", width="304", height="236")

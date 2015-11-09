@@ -33,7 +33,10 @@ exports.registerAccount = function(req, db, userModel, callback) {
 					"bio": "",
 					"major": "",
 					"profile_image": false,
-					"filename": ""
+					"filename": "",
+					"linkedin": "",
+					"twitter": "",
+					"facebook": ""
 				})
 			}).done(function(user) {
 				callback(user);
@@ -53,7 +56,10 @@ exports.updateAccount = function(req, db, userModel, callback) {
 			"bio": req.body.bio,
 			"major": req.body.major,
 			"profile_image": (req.file || JSON.parse(req.session.user.extendedProfile).profile_image) ? true : false,
-			"filename": (req.file) ? req.file.filename : ((JSON.parse(req.session.user.extendedProfile).filename) ? JSON.parse(req.session.user.extendedProfile).filename : "")
+			"filename": (req.file) ? req.file.filename : ((JSON.parse(req.session.user.extendedProfile).filename) ? JSON.parse(req.session.user.extendedProfile).filename : ""),
+			"linkedin": req.body.linkedin,
+			"twitter": req.body.twitter,
+			"facebook": req.body.facebook
 		})
 	}, {
 		where: {

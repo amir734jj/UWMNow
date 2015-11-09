@@ -410,9 +410,17 @@ app.get("/profile/:hashcode", function(req, res) {
 		} catch (e) {
 			userItem.extendedProfile = JSON.parse(JSON.stringify(user.extendedProfile));
 		}
-		res.render("profile", {
-			"user": req.session.user,
-			"profile": userItem
+
+		news.listApprovedNewsByGivenUser(req, sequelize, databaseModels.newsModel, databaseModels.userModel, function(news) {
+			discussion.getAllApprovedDiscussionByGivenUser(req, sequelize, databaseModels, function(discussions) {
+				res.render("profile", {
+					"user": req.session.user,
+					"profile": userItem,
+					"news": news,
+					"discussions": discussions
+				});
+			});
+
 		});
 	});
 });
@@ -441,6 +449,16 @@ app.get("/profile_image/:filename/delete", function(req, res) {
 	}
 });
 
+app.get("/search", function(req, res) {
+	if (req.session.user) {
+		res.render("users", {
+			"user": req.session.user
+		});
+	} else {
+		red.redirect("/login");
+	}
+});
+
 /*
  *	POST Requests:
  *		register
@@ -449,6 +467,24 @@ app.get("/profile_image/:filename/delete", function(req, res) {
  *		submitnews
  */
 
+app.post("/search", function(req, res) {
+	if (req.session.user) {
+		authentication.listAccounts(req, sequelize, databaseModels.userModel, function(users) {
+			var profiles = [];
+			_.map(users, function(userItem) {
+				if (JSON.stringify(userItem).indexOf(req.body.search_user) > -1) {
+					profiles.push(userItem);
+				}
+			});
+			res.render("users", {
+				"user": req.session.user,
+				"profiles": profiles
+			});
+		});
+	} else {
+		red.redirect("/login");
+	}
+});
 
 app.post("/addSchedule", function(req, res) {
 	schedule.addClass(req, sequelize, databaseModels, function(classes) {
