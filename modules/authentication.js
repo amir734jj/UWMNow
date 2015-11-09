@@ -51,7 +51,6 @@ exports.updateAccount = function(req, db, userModel, callback) {
 		firstName: req.body.firstName,
 		lastName: req.body.lastName,
 		password: req.body.password,
-		hashcode: encrypt(req.body.firstName + req.body.lastName + req.body.email),
 		extendedProfile: JSON.stringify({
 			"bio": req.body.bio,
 			"major": req.body.major,
