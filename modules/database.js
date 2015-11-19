@@ -48,6 +48,10 @@ exports.initialize = function(db, Sequelize) {
 		classUID: {
 			type: Sequelize.STRING,
 			unique: true
+		},
+		extendedAttributes: {
+			type: Sequelize.TEXT,
+			defaultValue: "{}"
 		}
 	}, {
 		freezeTableName: true

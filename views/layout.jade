@@ -11,12 +11,15 @@ html(lang="en")
 		link(rel="stylesheet", href="/css/bootstrap-wysihtml5.css")
 		link(rel="stylesheet", href="/css/summernote.css")
 		link(rel="stylesheet", href="/css/summernote-bs3.css")
+		link(rel="stylesheet", href="/css/star-rating.min.css")
+
 
 		script(src="/js/jquery.min.js")
 		script(src="/js/bootstrap.min.js")
 		script(src="/js/select2.min.js")
 		script(src="/js/summernote.js")
 		script(src="/js/jdenticon.min.js")
+		script(src="/js/star-rating.min.js")
 		script(src="/js/action.js")
 
 		block head
@@ -46,6 +49,10 @@ html(lang="en")
 									i(class="fa fa-sign-out")
 									| &nbsp Administrative
 						- if (user)
+							li
+								a(href="/rate")
+									i(class="fa fa-star-half-o")
+									| &nbsp Rate Class Difficulty
 							li
 								a(href="/search")
 									i(class="fa fa-search")

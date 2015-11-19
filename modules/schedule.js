@@ -16,10 +16,8 @@ exports.addClass = function(req, db, models, callback) {
 			"subscribeDate": new Date(),
 			"classDepartment": req.body.departmentCode,
 			"classNumber": req.body.classNumber,
-			"classDate": (_.isArray(req.body.classDate)) ? req.body.classDate : [].append(req.body.classDate)
+			"classDate": (_.isArray(req.body.classDate)) ? req.body.classDate : [req.body.classDate]
 		}
-
-
 		models.userModel.update({
 			"listOfSubscribedClasses": JSON.stringify(listOfSubscribedClasses)
 		}, {
@@ -27,7 +25,23 @@ exports.addClass = function(req, db, models, callback) {
 				hashcode: req.session.user.hashcode
 			}
 		}).done(function(userItem) {
-			callback(userItem);
+			models.classModel.findOne({
+				where: {
+					classUID: encrypt(req.body.departmentCode + req.body.classNumber)
+				}
+			}).done(function(classItem) {
+				if (_.isNull(classItem) || _.isUndefined(classItem)) {
+					models.classModel.create({
+						classDepartment: req.body.departmentCode,
+						classNumber: req.body.classNumber,
+						classUID: encrypt(req.body.departmentCode + req.body.classNumber)
+					}).done(function(newClassItem) {
+						callback(userItem);
+					});
+				} else {
+					callback(userItem);
+				}
+			});
 		});
 	});
 }

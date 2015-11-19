@@ -38,6 +38,7 @@ var utility = require("./modules/utility.js");
 var news = require("./modules/news.js");
 var email = require("./modules/email.js");
 var discussion = require("./modules/discussion.js");
+var classes = require("./modules/class.js");
 
 // initialize rootURL
 var rootURL = "http://localhost";
@@ -62,7 +63,7 @@ var sequelize = new Sequelize("database", "username", "password", {
 	host: "localhost",
 	dialect: "sqlite",
 	pool: {
-		max: 5,
+		max: 1,
 		min: 0,
 		idle: 10000
 	},
@@ -378,11 +379,30 @@ app.get("/administrative/discussion/:discussionUID/:command", function(req, res)
 // handle is loggedIn, the handle delete class, otherwise redirect to index
 app.get("/schedule", function(req, res) {
 	if (req.session.user) {
-		schedule.listClasses(req, sequelize, databaseModels, function(classes) {
+		schedule.listClasses(req, sequelize, databaseModels, function(myClassList) {
 			res.render("schedule", {
 				"listOfDepartment": discussion.getListOfDepartment(),
 				"user": req.session.user,
-				"classSchedules": classes
+				"classSchedules": myClassList
+			});
+		});
+	} else {
+		res.redirect("/login");
+	}
+});
+
+
+// handle is loggedIn, the handle delete class, otherwise redirect to index
+app.get("/schedule/check", function(req, res) {
+	if (req.session.user) {
+		schedule.listClasses(req, sequelize, databaseModels, function(myClassList) {
+			classes.getAllClasses(req, sequelize, databaseModels, function(allClassList) {
+				res.render("schedule", {
+					"listOfDepartment": discussion.getListOfDepartment(),
+					"user": req.session.user,
+					"classSchedules": myClassList,
+					"check": classes.classAnalyze(myClassList, allClassList)
+				});
 			});
 		});
 	} else {
@@ -397,7 +417,7 @@ app.get("/schedule/:departmentCode/:classNumber/deleteclass", function(req, res)
 			res.redirect("/schedule");
 		});
 	} else {
-		red.redirect("/login");
+		res.redirect("/login");
 	}
 });
 
@@ -432,7 +452,7 @@ app.get("/profile_image/:filename", function(req, res) {
 			root: __dirname
 		});
 	} else {
-		red.redirect("/login");
+		res.redirect("/login");
 	}
 
 });
@@ -445,7 +465,7 @@ app.get("/profile_image/:filename/delete", function(req, res) {
 			res.redirect("/logout");
 		})
 	} else {
-		red.redirect("/login");
+		res.redirect("/login");
 	}
 });
 
@@ -455,7 +475,20 @@ app.get("/search", function(req, res) {
 			"user": req.session.user
 		});
 	} else {
-		red.redirect("/login");
+		res.redirect("/login");
+	}
+});
+
+app.get("/rate", function(req, res) {
+	if (req.session.user) {
+		classes.getAllClasses(req, sequelize, databaseModels, function(classList) {
+			res.render("rate", {
+				"classList": classList,
+				"user": req.session.user
+			});
+		});
+	} else {
+		res.redirect("/login");
 	}
 });
 
@@ -466,6 +499,16 @@ app.get("/search", function(req, res) {
  *		accountupdate
  *		submitnews
  */
+
+app.post("/rate", function(req, res) {
+	if (req.session.user) {
+		classes.setClassRating(req, sequelize, databaseModels, function(classList) {
+			res.sendStatus(200);
+		});
+	} else {
+		res.redirect("/login");
+	}
+});
 
 app.post("/search", function(req, res) {
 	if (req.session.user) {
@@ -491,7 +534,7 @@ app.post("/search", function(req, res) {
 			}
 		});
 	} else {
-		red.redirect("/login");
+		res.redirect("/login");
 	}
 });
 

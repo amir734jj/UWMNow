@@ -1,0 +1,18 @@
+extends ./layout.jade
+
+block content
+	h3(style="color: green;") Class difficulty rating:
+	h4(style="color: green;") You can rate any class once, otherwise your previous rate will be overwritten.
+	table.table.table-hover.tablesorter
+		thead
+			tr
+				th.col-md-3 Class name
+				th.col-md-3 Count of ratings
+				th.col-md-6 Class difficulty level
+		tbody
+			- each classItem in classList
+				tr
+					th= classItem.classDepartment + "-" + classItem.classNumber
+					th= classItem.count
+					td
+						input.rating(classUID="#{classItem.classUID}", data-size="sm", data-min='0', data-max='5', data-step='1', value='#{classItem.value}', classDepartment="#{classItem.classDepartment}", classNumber="#{classItem.classNumber}")

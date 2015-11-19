@@ -299,7 +299,7 @@ exports.addDiscussion = function(req, db, models, callback) {
 			classUID: encrypt(req.params.departmentCode + req.params.classNumber)
 		}
 	}).done(function(classItem) {
-		if (_.isNull(classItem)) {
+		if (_.isNull(classItem) || _.isUndefined(classItem)) {
 			models.classModel.create({
 				classDepartment: req.params.departmentCode,
 				classNumber: req.params.classNumber,
