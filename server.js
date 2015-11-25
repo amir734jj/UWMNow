@@ -113,7 +113,10 @@ app.use(session({
 	}),
 	proxy: true,
 	resave: false,
-	saveUninitialized: true
+	saveUninitialized: true,
+	cookie: {
+		maxAge: 60 * 60 * 1000
+	}
 }));
 
 
