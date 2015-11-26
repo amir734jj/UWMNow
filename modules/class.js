@@ -1,4 +1,5 @@
 var _ = require("underscore");
+var encrypt = require("sha1");
 
 exports.getAllClasses = function(req, db, models, callback) {
 	models.classModel.findAll().done(function(classList) {
@@ -27,7 +28,26 @@ exports.getAllClasses = function(req, db, models, callback) {
 			callback(sortByKey(classList, "value"));
 		}
 	});
+}
 
+exports.getUsersEnrolled = function(req, db, models, callback) {
+	models.classModel.findOne({
+		where: {
+			classUID: encrypt(req.params.departmentCode + req.params.classNumber)
+		}
+	}).done(function(classItem) {
+		models.userModel.findAll().done(function(users) {
+			var usersReturn = [];
+			_.map(users, function(userItem) {
+				listOfClasses = JSON.parse(userItem["listOfSubscribedClasses"]);
+
+				if (listOfClasses && listOfClasses[encrypt(req.params.departmentCode + req.params.classNumber)]) {
+					usersReturn.push(userItem);
+				}
+			});
+			callback(usersReturn);
+		});
+	});
 }
 
 exports.setClassRating = function(req, db, models, callback) {
@@ -71,66 +91,126 @@ exports.classAnalyze = function(myClassList, allClassList) {
 		_.map(allClassList, function(classItem) {
 			if (key === classItem.classUID) {
 				value.rate = classItem.value;
+				value.name = classItem.classDepartment + "-" + classItem.classNumber;
 			}
 		});
 	});
 
 	var result = [];
+	var temp;
+	var count;
+
+	// check for multiple class in the same day
+	count = 0;
+	temp = {};
+	_.map(myClassList, function(value1, key1) {
+		_.map(value1.classDate, function(value2) {
+			if (temp[value2]) {
+				temp[value2].name.push(value1.name);
+				temp[value2].count = 1 + temp[value2].count;
+			} else {
+				temp[value2] = {};
+				temp[value2].name = [value1.name];
+				temp[value2].count = 1;
+			}
+		});
+	});
+
+
+
+	temp.temp = [];
+	_.map(temp, function(value, key) {
+		if (value.count >= 2) {
+			temp.temp.push(value.name);
+			count = value.count;
+		}
+	});
+
+	if (count >= 4) {
+		result.push({
+			"message": "According to the schedule, you have at least 4 classes on the same day",
+			"important": "alert alert-danger",
+			"result": temp.temp
+		});
+	}
+
 
 	// check for difficult class
-	var count1 = 0;
+	count = 0;
+	temp = [];
 	_.map(myClassList, function(value, key) {
 		if (value.rate >= 4) {
-			count1++;
+			count++;
+			temp.push(value.name);
 		}
 	});
-	if (count1 >= 2) {
+	if (count >= 2) {
 		result.push({
 			"message": "According to the users ratings: You have at least two difficult classes in the same semester",
-			"important": "alert alert-danger"
+			"important": "alert alert-danger",
+			"result": temp
 		});
 	}
 
 	// check for difficult class
-	var count2 = 0;
+	count = 0;
+	temp = [];
 	_.map(myClassList, function(value, key) {
 		if (parseInt(value.classNumber) >= 700) {
-			count2++;
+			count++;
+			temp.push(value.name);
 		}
 	});
-	if (count2 >= 2) {
+	if (count >= 2) {
 		result.push({
 			"message": "According to the class number: You have at least two graduate level classes in the same semester",
-			"important": "alert alert-danger"
+			"important": "alert alert-danger",
+			"result": temp
 		});
 	}
 
 
 	// check for difficult class
-	var count3 = 0;
+	count = 0;
+	temp = [];
 	_.map(myClassList, function(value, key) {
 		if (parseInt(value.classNumber) >= 500 && parseInt(value.classNumber) < 700) {
-			count3++;
+			count++;
+			temp.push(value.name);
 		}
 	});
-	if (count3 >= 2) {
+	if (count >= 2) {
 		result.push({
 			"message": "According to the class number: You have at least two senior level undergraduate classes in the same semester",
-			"important": "alert alert-danger"
+			"important": "alert alert-danger",
+			"result": temp
 		});
 	}
 
 	// check for easy class
-	var count4 = 0;
+	count = 0;
+	temp = [];
 	_.map(myClassList, function(value, key) {
 		if (value.rate >= 1 && value.rate < 3) {
-			count4++;
+			count++;
+			temp.push(value.name);
 		}
 	});
-	if (count4 >= 2) {
+	if (count >= 2) {
 		result.push({
 			"message": "According to the users ratings: You have at least two easy classes in the same semester",
-			"important": "alert alert-info"
+			"important": "alert alert-info",
+			"result": temp
+		});
+	}
+
+	// check for empty result
+	temp = [];
+	if (result.length === 0) {
+		result.push({
+			"message": "No issue has been found by the system",
+			"important": "alert alert-success",
+			"result": temp
 		});
 	}
 

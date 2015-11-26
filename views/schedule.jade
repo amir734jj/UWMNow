@@ -7,14 +7,19 @@ block content
 			each value, key in check
 				div(class="#{value.important}")
 					| #{value.message}
+					- if (value.result)
+						ul
+						- each item in value.result
+							li= item
+
 		h3(style="color: green;") Weekly schedule and associated discussion threads:
 		table.table.table-bordered
 			thead
 				tr
 					th Class name
 					th Class date
-					th Count of registered students
-					th Count of discussions
+					th.hidden-xs Count of registered students
+					th.hidden-xs Count of discussions
 					th Delete class
 			tbody
 				- each value, key in classSchedules
@@ -23,8 +28,8 @@ block content
 
 						th
 							| #{value.classDate.toString().toUpperCase().split(",").join("  ")}
-						th= value.countOfRegisteredStudents
-						th= value.discussionsCount
+						th.hidden-xs= value.countOfRegisteredStudents
+						th.hidden-xs= value.discussionsCount
 
 						th
 							.btn-group-vertical
@@ -37,7 +42,7 @@ block content
 				| Enter class schedule
 			a.btn.btn-success.btn-lg(type='button', href="/schedule/check")
 				| Evaluate schedule
-				
+
 		#myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
 			.modal-dialog.modal-lg(role='document')
 				.modal-content

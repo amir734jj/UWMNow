@@ -26,7 +26,7 @@ exports.initialize = function(db, Sequelize) {
 			defaultValue: false
 		},
 		listOfSubscribedClasses: {
-			type: Sequelize.BLOB
+			type: Sequelize.TEXT
 		},
 		memberSince: {
 			type: Sequelize.DATE
@@ -83,7 +83,7 @@ exports.initialize = function(db, Sequelize) {
 
 	var Discussion = db.define("discussion", {
 		discussionText: {
-			type: Sequelize.BLOB
+			type: Sequelize.TEXT
 		},
 		discussionDate: {
 			type: Sequelize.DATE

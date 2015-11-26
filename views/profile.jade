@@ -27,7 +27,17 @@ block content
 			canvas(data-jdenticon-hash="#{profile.hashcode}", class="img-rounded", width="304", height="236")
 
 	.clearfix
+	
+	hr
 
+	- if(classSchedules && Object.keys(classSchedules).length == 0)
+		h3(style="color: red;") This user has not subscribed to any class.
+	- else if(classSchedules && Object.keys(classSchedules).length > 0)
+		h3 List of subscribed classes:
+		ul
+		each value, key in classSchedules
+			li
+				| #{value.classDepartment} - #{value.classNumber}
 	hr
 
 	- if(news && news.length > 0)
@@ -42,7 +52,7 @@ block content
 					|  posted on #{moment(new Date(item.newsDate)).format('MM/DD/YYYY - hh:mm')} by 
 					a(href="/profile/#{item.user.hashcode}") #{item.initial}										
 					.clearfix
-					
+
 				div(class="panel-body")
 					| #{item.newsText}
 	- else					
@@ -64,7 +74,7 @@ block content
 					| for  
 					a(href="/discussion/#{discussionItem.departmentCode}/#{discussionItem.classNumber}") #{discussionItem.className}
 					.clearfix
-					
+
 				div(class="panel-body")
 					| !{discussionItem.discussionText}
 

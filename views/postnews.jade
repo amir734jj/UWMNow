@@ -2,18 +2,18 @@ extends ./layout.jade
 
 block content
 	.container
-		h3(style="color: green;") Post a news:
+		h3(style="color: green;") Post a news/advice:
 
 		form(role="form", action="/submitnews", method="post", required)
 			div.form-group
-				label News Text (140 characters, Twitter style):
-				textarea.form-control(type="text", placeholder="Enter a news item (140 characters)", name="newsText", autofocus="", required, maxlength="140")
+				label News/Advice Text (140 characters, Twitter style):
+				textarea.form-control(type="text", placeholder="Enter a news/advice item (140 characters)", name="newsText", autofocus="", required, maxlength="140")
 			div.btn-group
-				button.btn.btn-primary(type="submit") Post News
+				button.btn.btn-primary(type="submit") Post News/Advice
 		
 		hr
 		
-		h3(style="color: green;") List of news posted by you (in chronological order):
+		h3(style="color: green;") List of news/advice posted by you (in chronological order):
 		- each item in news
 			div(class="panel panel-default")
 				div(class="panel-heading", style="font-weight: bold;")

@@ -22,24 +22,49 @@ exports.registerAccount = function(req, db, userModel, callback) {
 			user.already = true;
 			callback(user);
 		} else {
-			userModel.create({
-				firstName: req.body.firstName,
-				lastName: req.body.lastName,
-				email: req.body.email,
-				password: req.body.password,
-				hashcode: encrypt(req.body.firstName + req.body.lastName + req.body.email),
-				memberSince: new Date(),
-				extendedProfile: JSON.stringify({
-					"bio": "",
-					"major": "",
-					"profile_image": false,
-					"filename": "",
-					"linkedin": "",
-					"twitter": "",
-					"facebook": ""
-				})
-			}).done(function(user) {
-				callback(user);
+			userModel.findAll().done(function(usersAll) {
+				if (usersAll.length === 0) {
+					userModel.create({
+						admin: true,
+						firstName: req.body.firstName,
+						lastName: req.body.lastName,
+						email: req.body.email,
+						password: req.body.password,
+						hashcode: encrypt(req.body.firstName + req.body.lastName + req.body.email),
+						memberSince: new Date(),
+						extendedProfile: JSON.stringify({
+							"bio": "",
+							"major": "",
+							"profile_image": false,
+							"filename": "",
+							"linkedin": "",
+							"twitter": "",
+							"facebook": ""
+						})
+					}).done(function(user) {
+						callback(user);
+					});
+				} else {
+					userModel.create({
+						firstName: req.body.firstName,
+						lastName: req.body.lastName,
+						email: req.body.email,
+						password: req.body.password,
+						hashcode: encrypt(req.body.firstName + req.body.lastName + req.body.email),
+						memberSince: new Date(),
+						extendedProfile: JSON.stringify({
+							"bio": "",
+							"major": "",
+							"profile_image": false,
+							"filename": "",
+							"linkedin": "",
+							"twitter": "",
+							"facebook": ""
+						})
+					}).done(function(user) {
+						callback(user);
+					});
+				}
 			});
 		}
 	});

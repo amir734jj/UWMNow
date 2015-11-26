@@ -40,7 +40,7 @@ block content
 				div.btn-group
 					button.btn.btn-primary(type="submit", autofocus) Update account information
 					a.btn.btn-default(href="/profile/#{user.hashcode}") View profile as other users
-			.col-md-4.hidden-xs
+			.col-md-4.hidden-sm
 				- if (user.extendedProfile.profile_image && user.extendedProfile.profile_image == true)
 					img(src="profile_image/#{user.extendedProfile.filename}", class="img-rounded", width="304", height="236")
 				- else

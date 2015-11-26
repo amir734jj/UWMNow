@@ -343,12 +343,15 @@ app.get("/discussion/deletediscussion/:discussionUID", function(req, res) {
 app.get("/discussion/:departmentCode/:classNumber", function(req, res) {
 	if (req.session.user) {
 		discussion.getDiscussionByClass(req, sequelize, databaseModels, function(discussionsByClass) {
-			res.render("participate", {
-				"user": req.session.user,
-				"discussionsByClass": discussionsByClass,
-				"className": req.params.departmentCode + "-" + req.params.classNumber,
-				"departmentCode": req.params.departmentCode,
-				"classNumber": req.params.classNumber
+			classes.getUsersEnrolled(req, sequelize, databaseModels, function(usersEnrolled) {
+				res.render("participate", {
+					"user": req.session.user,
+					"discussionsByClass": discussionsByClass,
+					"className": req.params.departmentCode + "-" + req.params.classNumber,
+					"departmentCode": req.params.departmentCode,
+					"classNumber": req.params.classNumber,
+					"usersEnrolled": usersEnrolled
+				});
 			});
 		});
 	} else {
@@ -436,14 +439,17 @@ app.get("/profile/:hashcode", function(req, res) {
 
 		news.listApprovedNewsByGivenUser(req, sequelize, databaseModels.newsModel, databaseModels.userModel, function(news) {
 			discussion.getAllApprovedDiscussionByGivenUser(req, sequelize, databaseModels, function(discussions) {
-				res.render("profile", {
-					"user": req.session.user,
-					"profile": userItem,
-					"news": news,
-					"discussions": discussions
+				schedule.listClasses(req, sequelize, databaseModels, function(classes) {
+					res.render("profile", {
+						"user": req.session.user,
+						"profile": userItem,
+						"news": news,
+						"discussions": discussions,
+						"classSchedules": classes
+					});
 				});
-			});
 
+			});
 		});
 	});
 });
@@ -648,14 +654,17 @@ app.post("/postdiscussion/:departmentCode/:classNumber", function(req, res) {
 
 		if (text.length >= 1000) {
 			discussion.getDiscussionByClass(req, sequelize, databaseModels, function(discussionsByClass) {
-				res.render("participate", {
-					"user": req.session.user,
-					"discussionsByClass": discussionsByClass,
-					"className": req.params.departmentCode + "-" + req.params.classNumber,
-					"departmentCode": req.params.departmentCode,
-					"classNumber": req.params.classNumber,
-					"countError": true,
-					"defaultText": req.body.discussionText
+				classes.getUsersEnrolled(req, sequelize, databaseModels, function(usersEnrolled) {
+					res.render("participate", {
+						"user": req.session.user,
+						"discussionsByClass": discussionsByClass,
+						"className": req.params.departmentCode + "-" + req.params.classNumber,
+						"departmentCode": req.params.departmentCode,
+						"classNumber": req.params.classNumber,
+						"usersEnrolled": usersEnrolled,
+						"countError": true,
+						"defaultText": req.body.discussionText
+					});
 				});
 			});
 		} else {

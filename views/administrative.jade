@@ -41,7 +41,7 @@ block content
 
 		hr
 		- if(news && news.length > 0)
-			h3(style="color: green;") List of news posted by students (in chronological order):
+			h3(style="color: green;") List of news/advice posted by students (in chronological order):
 			- each item in news
 				div(class="panel panel-default")
 					div(class="panel-heading", style="font-weight: bold;")
@@ -63,7 +63,7 @@ block content
 					div(class="panel-body")
 						| #{item.newsText}
 		- else					
-			h3(style="color: red;") There is no news yet to be Approved
+			h3(style="color: red;") There is no news/advice yet to be Approved
 
 		hr
 		- if(discussions && discussions.length > 0)	
