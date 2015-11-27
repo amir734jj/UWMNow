@@ -117,7 +117,6 @@ exports.classAnalyze = function(myClassList, allClassList) {
 	});
 
 
-
 	temp.temp = [];
 	_.map(temp, function(value, key) {
 		if (value.count >= 2) {
