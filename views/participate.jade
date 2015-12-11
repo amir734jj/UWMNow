@@ -2,7 +2,7 @@ extends ./layout.jade
 
 block content
 	.container
-		h2 Classs Discussions for #{className}:
+		h2 Class Discussions for #{className}:
 
 		- if (countError)
 			.alert.alert-danger(role='alert')
@@ -24,6 +24,25 @@ block content
 			div.btn-group
 				button.btn.btn-primary(type="submit") Post Discussion
 					span#discussionTextCharacterCount
+
+		#myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+			.modal-dialog.modal-lg(role='document')
+				.modal-content
+					.modal-header
+						button.close(type='button', data-dismiss='modal', aria-label='Close')
+							span(aria-hidden='true') ×
+						h4#myModalLabel.modal-title List of enrolled users
+					.modal-body
+						- if (usersEnrolled && usersEnrolled.length === 0)
+							h4(style="color: red;") As of now, no one has registerd in this class				
+						- else if (usersEnrolled && usersEnrolled.length > 0)
+							ul
+							- each usersEnrolledItem in usersEnrolled
+								li
+									a(href="/profile/#{usersEnrolledItem.hashcode}")= usersEnrolledItem.firstName + " " + usersEnrolledItem.lastName 
+
+					.modal-footer
+						button.btn.btn-default(type='button', data-dismiss='modal') Close
 
 		- if (discussionsByClass) 
 			hr
@@ -50,24 +69,7 @@ block content
 
 
 
-				#myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
-					.modal-dialog.modal-lg(role='document')
-						.modal-content
-							.modal-header
-								button.close(type='button', data-dismiss='modal', aria-label='Close')
-									span(aria-hidden='true') ×
-								h4#myModalLabel.modal-title List of enrolled users
-							.modal-body
-								- if (usersEnrolled && usersEnrolled.length === 0)
-									h4(style="color: red;") As of now, no one has registerd in this class
-								- else if (usersEnrolled && usersEnrolled.length > 0)
-									ul
-									- each usersEnrolledItem in usersEnrolled
-										li
-											a(href="/profile/#{usersEnrolledItem.hashcode}")= usersEnrolledItem.firstName + " " + usersEnrolledItem.lastName 
 
-							.modal-footer
-								button.btn.btn-default(type='button', data-dismiss='modal') Close
 
 			- else
 				h3(style="color: red;") There is no discussion post for #{className}

@@ -41,7 +41,7 @@ var discussion = require("./modules/discussion.js");
 var classes = require("./modules/class.js");
 
 // initialize rootURL
-var rootURL = "http://localhost";
+var rootURL = "http://65.29.170.122";
 
 // initialize port number
 var portNumber = 80;

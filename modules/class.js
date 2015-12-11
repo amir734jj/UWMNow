@@ -119,7 +119,7 @@ exports.classAnalyze = function(myClassList, allClassList) {
 
 	temp.temp = [];
 	_.map(temp, function(value, key) {
-		if (value.count >= 2) {
+		if (value.count >= 4) {
 			temp.temp.push(value.name);
 			count = value.count;
 		}

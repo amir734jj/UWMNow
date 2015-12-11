@@ -1,6 +1,6 @@
  $(document).ready(function() {
 
- 	$("#listOfDepartment").select2();
+ 	$("#listOfDepartment").select2({width: '100%'});
 
  	$('#discussionText').summernote({
  		toolbar: [
